@@ -34,7 +34,7 @@ services:
   nginx:
     restart: unless-stopped
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./nginx
     depends_on:
       - api
