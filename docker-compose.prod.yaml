@@ -1,0 +1,27 @@
+services:
+  client:
+    container_name: client
+    image: 'docker.io/naveenverma088/cs5200_bookmakers_dockerized-client'
+
+  api:
+    container_name: api
+    image: 'docker.io/naveenverma088/cs5200_bookmakers_dockerized-api'
+    depends_on:
+      - mongo
+
+  mongo:
+    image: 'docker.io/naveenverma088/cs5200_bookmakers_dockerized-mongo'
+    restart: always
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: nverma
+      MONGO_INITDB_ROOT_PASSWORD: teret
+
+  nginx:
+    restart: always
+    image: 'docker.io/naveenverma088/cs5200_bookmakers_dockerized-nginx'
+    depends_on:
+      - api
+      - client
+    ports:
+      - "80:80"

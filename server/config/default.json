@@ -1,0 +1,6 @@
+{
+  "jwtPrivateKey": "theBookMakerKey",
+  "db": "mongodb://nverma:teret@mongo:27017/admin",
+  "port": "3900",
+  "requiresAuth": true
+}

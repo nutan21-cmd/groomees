@@ -1,0 +1,45 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    # ports:
+    #   - 3001:3001
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    # ports:
+    #   - 3000:3000
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo1
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: nverma
+      MONGO_INITDB_ROOT_PASSWORD: teret
+    volumes:
+      - ./db_data/:/data/db/
+
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    depends_on:
+      - api
+      - client
+    ports:
+      - "3050:80"

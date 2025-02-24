@@ -1,0 +1,26 @@
+const categories = [
+  "Novel",
+  "History",
+  "Fiction",
+  "Fantasy",
+  "Educational",
+  "Cooking",
+  "Comics",
+  "Biography",
+  "Autobiography",
+  "Political",
+  "Engineering",
+  "Technology",
+  "Business",
+  "Economics",
+  "Mathematics",
+  "Biology",
+  "Medical",
+  "Science",
+  "Health",
+  "Music",
+  "Religion",
+  "Philosophy",
+  "Non-Fiction"
+];
+module.exports = categories;
