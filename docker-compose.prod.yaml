@@ -16,6 +16,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: nverma
       MONGO_INITDB_ROOT_PASSWORD: teret
+    volumes:
+      - ./db_data/:/data/db/
 
   nginx:
     restart: always

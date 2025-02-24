@@ -6,6 +6,8 @@ services:
     volumes:
       - /app/node_modules
       - ./client:/app
+    environment:
+      - WDS_SOCKET_PORT=0
     # ports:
     #   - 3001:3001
 
@@ -23,7 +25,7 @@ services:
 
   mongo:
     image: mongo
-    restart: always
+    restart: unless-stopped
     container_name: mongo1
     ports:
       - 27017:27017
@@ -34,7 +36,7 @@ services:
       - ./db_data/:/data/db/
 
   nginx:
-    restart: always
+    restart: unless-stopped
     build:
       dockerfile: Dockerfile.dev
       context: ./nginx
