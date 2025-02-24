@@ -1,0 +1,37 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    
+jobs:
+  build-and-push:
+    runs-on: debian-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "naveenverma088" --password-stdin
+      
+      - name: Build and push client image
+        run: |
+          cd client
+          docker build . --file Dockerfile --tag naveenverma088/bookmakers_dockerized-client:latest
+          docker push naveenverma088/bookmakers_dockerized-client:latest
+      
+      - name: Build and push API image
+        run: |
+          cd server
+          docker build . --file Dockerfile --tag naveenverma088/bookmakers_dockerized-api:latest
+          docker push naveenverma088/bookmakers_dockerized-api:latest
+      
+      - name: Build and push Nginx image
+        run: |
+          cd nginx
+          docker build . --file Dockerfile --tag naveenverma088/bookmakers_dockerized-nginx:latest
+          docker push naveenverma088/bookmakers_dockerized-nginx:latest
