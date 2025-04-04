@@ -3,14 +3,13 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const { AddressSchema } = require("./address");
-const { PhoneSchema } = require("./phone");
 const config = require("config");
 //todo add publisher reference.
 
 const PersonSchema = new mongoose.Schema({
   TYPE: {
     type: String,
-    enum: ["Admin", "Owner", "Reader", "Critic", "Author"]
+    enum: ["Admin", "User"]
   },
   firstName: {
     type: String,
@@ -23,27 +22,16 @@ const PersonSchema = new mongoose.Schema({
     trim: true,
     maxlength: 200
   },
-  gender: {
-    type: String,
-    enum: ["Male", "Female"]
-  },
-  password: {
-    type: String,
-    required: true,
-    maxlength: 1024
-  },
-  dateOfBirth: {
-    type: Date
-  },
   email: {
     type: String,
     trim: true,
     maxlength: 100
   },
-  addresses: [AddressSchema],
-  phones: [PhoneSchema],
-  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Persons" }],
-  feeds: [{ type: String }]
+  phone: {
+    type: Number,
+    length: 10
+  },
+  address: AddressSchema,
 });
 
 PersonSchema.methods.generateAuthToken = function() {
@@ -63,7 +51,5 @@ PersonSchema.methods.generateAuthToken = function() {
 };
 
 const Person = mongoose.model("Persons", PersonSchema);
-
-function validateMovie(Book) {}
 
 exports.Person = Person;

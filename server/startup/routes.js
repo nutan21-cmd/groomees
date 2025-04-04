@@ -1,25 +1,16 @@
 const express = require("express");
-const books = require("../routes/books");
 const users = require("../routes/users");
-const bookstores = require("../routes/bookstores");
-const genres = require("../routes/genres");
+const categories = require("../routes/categories");
+const treatments = require("../routes/treatments")
+const bookings = require("../routes/bookings");
+const twilioRoutes = require("../routes/twilio");
 
-const orders = require("../routes/orders");
-const rentals = require("../routes/rentals");
-const carts = require("../routes/carts");
-const bookshelf = require("../routes/bookshelf");
-const auth = require("../routes/auth");
 
 module.exports = function(app) {
   app.use(express.json());
-  app.use("/api/books", books);
-
+  app.use("/api/categories", categories)
+  app.use("/api/treatments", treatments)
   app.use("/api/users", users);
-  app.use("/api/bookstores", bookstores);
-  app.use("/api/orders", orders);
-  app.use("/api/rentals", rentals);
-  app.use("/api/carts", carts);
-  app.use("/api/genres", genres);
-  app.use("/api/bookshelf", bookshelf);
-  app.use("/api/auth", auth);
+  app.use("/api/bookings", bookings);
+  app.use("/api/twilio", twilioRoutes);
 };

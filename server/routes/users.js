@@ -6,51 +6,18 @@ const router = express.Router();
 const _ = require("lodash");
 const Joi = require("joi");
 
-router.get("/", async (req, res) => {
-  const users = await Person.find()
-    .select("-__v")
-    .select("-password")
-    .sort("firstName");
-  res.send(users);
-});
-
-router.get("/critics", async (req, res) => {
-  const users = await Person.find({ TYPE: "Critic" })
-    .select("-__v")
-    .select("-password")
-    .sort("firstName");
-  res.send(users);
-});
-
-router.get("/readers", async (req, res) => {
-  const users = await Person.find({ TYPE: "Reader" })
-    .select("-__v")
-    .select("-password")
-    .sort("firstName");
-  res.send(users);
-});
-
-router.get("/authors", async (req, res) => {
-  const users = await Person.find({ TYPE: "Author" })
-    .select("-__v")
-    .select("-password")
-    .sort("firstName");
-  res.send(users);
-});
-
-router.get("/owners", async (req, res) => {
-  const users = await Person.find({ TYPE: "Owner" })
-    .select("-__v")
-    .select("-password")
-    .sort("firstName");
-  res.send(users);
-});
 
 router.get("/:id", validateObject, async (req, res) => {
   const users = await Person.findById(req.params.id)
     .select("-__v")
     .select("-password")
     .sort("firstName");
+  res.send(users);
+});
+
+router.get("/phone/:phone", async (req, res) => {
+  const users = await Person.findOne({phone: req.params.phone})
+    .select("-__v")
   res.send(users);
 });
 
@@ -107,23 +74,15 @@ router.post("/register", async (req, res) => {
   const { error } = validateRegisterUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let person = await Person.findOne({ email: req.body.email });
+  let person = await Person.findOne({ phone: req.body.phone });
   if (person) return res.status(400).send("User is already registered.");
 
   person = new Person(
-    _.pick(req.body, ["firstName", "lastName", "gender", "email", "password"])
+    _.pick(req.body, ["firstName", "lastName", "phone", "email", "address"])
   );
-  person.TYPE = "Reader";
-  const salt = await bcrypt.genSalt(10);
-  person.password = await bcrypt.hash(person.password, salt);
-  console.log(person);
+  person.TYPE = "User";
   await person.save();
-
-  const token = person.generateAuthToken();
-  res
-    .header("x-auth-token", token)
-    .header("access-control-expose-headers", "x-auth-token")
-    .send(_.pick(person, ["_id", "firstName", "lastName", "TYPE", "email"]));
+    res.send(_.pick(person, ["_id", "firstName", "lastName", "TYPE", "email", "address"]));
 });
 
 function validateRegisterUser(body) {
@@ -133,65 +92,107 @@ function validateRegisterUser(body) {
       .max(255)
       .required()
       .email(),
-    password: Joi.string()
-      .max(255)
-      .required(),
-    gender: Joi.string()
-      .min(4)
-      .max(6)
-      .required(),
     firstName: Joi.string()
       .max(40)
       .required(),
     lastName: Joi.string()
       .max(40)
-      .required()
+      .required(),
+    phone: Joi.number().required(),
+    address: Joi.object({
+      flat: Joi.string().required(),
+      area: Joi.string().required(),
+      landmark: Joi.string().required(),
+      pincode: Joi.string(),
+      city: Joi.string().required()
+    })
   };
 
   return Joi.validate(body, schema);
 }
 
-//new user
-router.post("/", async (req, res) => {
-  let person = new Person({
-    TYPE: req.body.type,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    gender: req.body.gender,
-    email: req.body.email,
-    password: req.body.password,
-    dateOfBirth: new Date(req.body.dob),
+router.post("/:id", async (req, res) => {
+  try {
+    // Validate the request body
+    const schema = Joi.object({
+      firstName: Joi.string().max(40),
+      lastName: Joi.string().max(40),
+      phone: Joi.number(),
+      email: Joi.string().email(),
+      address: Joi.object({
+        flat: Joi.string(),
+        area: Joi.string(),
+        landmark: Joi.string(),
+        pincode: Joi.string(),
+        city: Joi.string()
+      })
+    });
 
-    addresses: [
-      {
-        street: req.body.street1,
-        city: req.body.city1,
-        state: req.body.state1,
-        zip: req.body.zip1,
-        isPrimary: true
-      },
-      {
-        street: req.body.street2,
-        city: req.body.city2,
-        state: req.body.state2,
-        zip: req.body.zip2
-      }
-    ],
-    phones: [
-      {
-        phone: req.body.phone1,
-        isPrimary: true
-      },
-      {
-        phone: req.body.phone2
-      }
-    ]
-  });
+    const { error } = schema.validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  person.followers.push(req.params.id);
-  const saved = await person.save();
-  res.send({ _id: saved._id });
+    // Find the person by ID
+    const person = await Person.findById(req.params.id);
+    if (!person) return res.status(404).send("The person with the given ID was not found.");
+
+    // Update the fields if they exist in the request body
+    if (req.body.firstName) person.firstName = req.body.firstName;
+    if (req.body.lastName) person.lastName = req.body.lastName;
+    if (req.body.phone) person.phone = req.body.phone;
+    if (req.body.email) person.email = req.body.email;
+    if (req.body.address) person.address = req.body.address;
+
+    // Save the updated person
+    const updatedPerson = await person.save();
+
+    // Send the updated person details in the response
+    res.send(_.pick(updatedPerson, ["_id", "firstName", "lastName", "phone", "email", "address"]));
+  } catch (error) {
+    res.status(500).send({ error: "An error occurred while updating the person.", details: error.message });
+  }
 });
+
+//new user
+// router.post("/", async (req, res) => {
+//   let person = new Person({
+//     TYPE: req.body.type,
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     gender: req.body.gender,
+//     email: req.body.email,
+//     password: req.body.password,
+//     dateOfBirth: new Date(req.body.dob),
+
+//     addresses: [
+//       {
+//         street: req.body.street1,
+//         city: req.body.city1,
+//         state: req.body.state1,
+//         zip: req.body.zip1,
+//         isPrimary: true
+//       },
+//       {
+//         street: req.body.street2,
+//         city: req.body.city2,
+//         state: req.body.state2,
+//         zip: req.body.zip2
+//       }
+//     ],
+//     phones: [
+//       {
+//         phone: req.body.phone1,
+//         isPrimary: true
+//       },
+//       {
+//         phone: req.body.phone2
+//       }
+//     ]
+//   });
+
+//   person.followers.push(req.params.id);
+//   const saved = await person.save();
+//   res.send({ _id: saved._id });
+// });
 
 //remove(unfollow) the current user as a follwer of someone else
 router.delete("/:id/unfollow/:personId", validateObject, async (req, res) => {
