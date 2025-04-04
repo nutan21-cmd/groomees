@@ -1,0 +1,73 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100vh; /* Full viewport height */
+  padding: 20px;
+  box-sizing: border-box; /* Ensure padding doesn't affect height */
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+  margin-top: 20px;
+
+  .logo {
+    height: 40px;
+  }
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.login-description {
+  color: #8c8c8c;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.mobile-instruction {
+  color: #8c8c8c;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.phone-input-container {
+  margin-bottom: 20px;
+}
+
+.phone-input {
+  --border-radius: 8px;
+  --border-width: 1px;
+  --border-color: #e0e0e0;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  margin-bottom: 20px;
+}
+
+.country-code {
+  color: #8c8c8c;
+  font-size: 14px;
+  padding-right: 8px;
+  border-right: 1px solid #e0e0e0;
+  margin-right: 8px;
+}
+
+.send-otp-button {
+  --background: #f5f5f5;
+  --color: #8c8c8c;
+  --border-radius: 8px;
+  --box-shadow: none;
+  margin-top: 10px;
+  font-weight: normal;
+  height: 50px;
+}

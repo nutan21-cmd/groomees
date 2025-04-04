@@ -1,0 +1,99 @@
+ion-item {
+  --background: #ffffff; /* Set background color to white */
+  --color: #333; /* Set text color to #333 */
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+  margin-bottom: 4px;
+
+  ion-label {
+    font-size: 1em;
+    opacity: 1; /* Ensure full opacity for text */
+  }
+
+  ion-icon {
+    color: #333; /* Set icon color to match text */
+  }
+
+  &[color="danger"] {
+    color: var(--ion-color-danger);
+
+    ion-icon {
+      color: var(--ion-color-danger);
+    }
+  }
+}
+
+ion-list {
+  background: transparent;
+}
+
+
+.profile-header {
+  ion-toolbar {
+    --background: linear-gradient(to right, #f8f8f8, #ffffff);
+    --border-width: 0 0 1px 0;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+  }
+
+  ion-back-button {
+    --color: #555;
+    --icon-margin-end: 8px;
+  }
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  margin-left: 4px;
+}
+
+.profile-icon {
+  ion-icon {
+    font-size: 32px;
+    color: #444;
+  }
+}
+
+.profile-info {
+  margin-left: 10px;
+  line-height: 1;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #666;
+    font-weight: 400;
+  }
+}
+
+.username{
+
+  color: #333;
+  padding-right: 5px;
+}
+
+.edit-button {
+  --background: transparent;
+  --color: #555;
+  --border-radius: 50%;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  
+  ion-icon {
+    font-size: 22px;
+  }
+  
+  &:hover {
+    --background: rgba(0, 0, 0, 0.05);
+  }
+}

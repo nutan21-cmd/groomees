@@ -1,0 +1,126 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+:root {
+  --primary-color: #ff6b6b;
+  --secondary-color: #4ecdc4;
+  --background-color: #f4f4f4;
+  --text-color: #333;
+  --card-background: white;
+  --text-color: #333;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+ion-content {
+  margin-top: 60px !important; /* Add margin equal to the header height */
+  --background: var(--background-color);
+
+}
+
+ion-header ion-toolbar {
+  --background: var(--background-color) !important; /* Force the background color */
+}
+
+ion-header img.header-logo {
+  width: 100%; /* Full width */
+  height: 60px; /* Maintain aspect ratio */
+
+}
+
+.card-section {
+  margin-bottom: 20px;
+  background-color: var(--card-background);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.card-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-section {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.text-color{
+ color: var(--text-color)
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Make the button more attractive */
+ion-button {
+  --color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  height: 50px;
+  --border-radius: 8px;
+  margin: 0; /* Remove any default margins from button */
+}
+
+ion-back-button{
+  --color: var(--text-color);
+}
+
+ion-alert.professional-alert .alert-title.sc-ion-alert-md,
+ion-app ion-alert.professional-alert .alert-title.sc-ion-alert-md,
+html body ion-alert.professional-alert .alert-title.sc-ion-alert-md {
+  color: var(--text-color) !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+}
+ion-alert.professional-alert .alert-message.sc-ion-alert-ios{
+  color: var(--text-color) !important;
+}
+
+ion-alert.professional-alert .alert-title.sc-ion-alert-ios {
+  color: var(--text-color) !important;
+  
+}
+
+
+
+

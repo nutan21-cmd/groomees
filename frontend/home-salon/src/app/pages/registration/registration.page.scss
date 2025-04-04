@@ -1,0 +1,110 @@
+.registration-container {
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .form-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-color);
+  }
+  
+  .form-subtitle {
+    color: var(--text-color);
+    margin-bottom: 32px;
+    font-size: 16px;
+  }
+  
+  .form-section {
+    margin-bottom: 32px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    position: relative;
+    padding-bottom: 10px;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 40px;
+      background: var(--ion-color-primary);
+      border-radius: 2px;
+    }
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    
+    @media (max-width: 576px) {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+  
+  .form-input {
+    margin-bottom: 16px;
+    --border-radius: 8px;
+    --background: #ffffff;
+    --padding-start: 16px;
+    --highlight-color: var(--ion-color-primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    color: var(--text-color) !important;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    ion-label {
+      font-weight: 500;
+      color: var(--text-color) !important;
+    }
+    
+    ion-input {
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      font-size: 16px;
+    }
+  }
+  
+  .submit-button {
+    --background: var(--ion-color-primary);
+    --border-radius: 10px;
+    --box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+    margin-top: 16px;
+    height: 54px;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    
+    &:hover {
+      --background: var(--ion-color-primary-shade);
+    }
+  }
+  
+  // Error styling
+  .invalid-input {
+    --border-color: var(--ion-color-danger);
+  }
+  
+  .error-message {
+    color: var(--ion-color-danger);
+    font-size: 12px;
+    margin-left: 16px;
+    margin-top: 4px;
+  }

@@ -1,0 +1,49 @@
+<!-- beauty-salon-promo.page.html -->
+<ion-header [translucent]="true" color="text-color">
+  <ion-toolbar>
+    <ion-buttons slot="start" >
+      <ion-back-button [defaultHref]="categoryId ? '/categories/' + categoryId : '/tabs/home'"></ion-back-button>
+    </ion-buttons>
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" *ngIf="bookingInfo">
+  <div class="card-section">
+    <!-- Promo Header -->
+    <!-- <div class="promo-header">
+      <div class="header-content">
+        <h1 *ngIf="bookingInfo.title">{{bookingInfo.title}}</h1>
+      </div>
+    </div> -->
+
+    <!-- Hero Image with Discount Overlay -->
+    <div class="hero-section">
+      <!-- <img [src]="{{bookingInfo.imageUrl}}" alt="{{bookingInfo.title}}"> -->
+      <img [src]="bookingInfo.imageUrl" [alt]=bookingInfo.title class="service-icon">
+    </div>
+
+    <!-- Offer Details -->
+    <ion-card style="margin: 0;">
+      <ion-card-content>
+        <h3 class="offer-title">{{bookingInfo.title}}</h3>
+        
+        <p class="offer-description">
+         {{bookingInfo.contentDescription}}
+        </p>
+
+        <div class="offer-highlights">
+          <h4>Highlights:</h4>
+          <ul>
+            <li *ngFor="let highlight of bookingInfo.contentHighlights.split('\n')">
+              {{ highlight }}
+            </li>
+          </ul>
+        </div>
+
+        <ion-button expand="block" color="primary" (click)="onBookNow()">
+          Book Now
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

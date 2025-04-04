@@ -1,0 +1,7 @@
+{
+  "name": "home-salon",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,52 @@
+<ion-header [translucent]="true" color="text-color">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="card-section" *ngFor="let history of historys" [ngClass]="{'cancelled': history.status === 'cancelled'}">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="image-service" size="12" size-md="3">
+          <img [src]="history.treatmentId.imageUrl" [alt]="history.treatmentId.title" class="circle-image" />
+        </ion-col> 
+        <ion-col size="12" size-md="9">
+          <div class="card-content">
+            <div>
+              <ion-badge [color]="history.status === 'confirmed' ? 'success' : 'danger'">
+                {{history.status | uppercase}}
+              </ion-badge>
+            </div>
+            
+            <div class="service-title">{{history.treatmentId.title}}</div>
+            
+            <div class="appointment-time">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{history.selectedDate}} {{history.selectedSlot}}</span>
+            </div>
+            
+            <div class="price">
+              <span>Amount</span>
+              <span class="price-value">₹{{history.treatmentId.price}}</span>
+            </div>
+            
+            <div class="action-buttons" *ngIf="history.status === 'confirmed'">
+              <button class="reschedule-btn" (click)="rescheduleBooking(history._id)">
+                <ion-icon name="calendar-outline"></ion-icon>
+                Reschedule
+              </button>
+              <button class="cancel-btn" (click)="cancelBooking(history._id)">
+                <ion-icon name="close-circle-outline"></ion-icon>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,301 @@
+/* Global Styles */
+:host {
+  --primary-color: #ff6b6b;
+  --secondary-color: #4ecdc4;
+  --background-color: #f4f4f4;
+  --text-color: #333;
+  --card-background: white;
+}
+
+ion-content {
+  --background: var(--background-color);
+}
+
+/* Service Header */
+.service-header {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.service-header .service-icon {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.service-header .service-price {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Booking Sections */
+.booking-section {
+  margin-bottom: 20px;
+  background-color: var(--card-background);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.booking-section h2 {
+  font-size: 16px;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+/* Date Selector */
+.date-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.date-selector {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+ion-chip {
+  --background: white;
+  --color: var(--text-color);
+  border: 1px solid #ddd;
+  padding: 10px;
+  min-width: 60px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+ion-chip.selected {
+  // --background: var(--÷primary-color);
+  --color: #1c1b1b;
+  border: 1px solid var(--text-color);
+}
+
+/* Slot Selector */
+.slot-selector-scroller {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.slot-selector {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.slot-selector ion-chip {
+  min-width: 100px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+
+
+
+
+/* Confirm Button */
+.confirm-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background-color: white;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+  z-index: 10;
+  margin-top: 20px;
+}
+
+ion-button {
+  --background: var(--primary-color);
+  --color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  height: 50px;
+}
+
+ion-button:disabled {
+  --background: #cccccc;
+  --color: #666666;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 360px) {
+  ion-chip {
+    min-width: 50px;
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+
+
+/* Address Form Container */
+.form-container {
+  background-color: var(--card-background);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* Reduced bottom margin to minimize gap with confirm button */
+  margin-bottom: 20px; 
+  overflow-y: auto;
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: var(--card-background);
+  --border-color: #ddd;
+  --highlight-color-focused: var(--primary-color);
+  border-radius: 8px;
+  margin: 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Style for ion-input and ion-select */
+ion-input {
+  --background: var(--card-background);
+  --color: var(--text-color);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  font-size: 14px;
+  --placeholder-color: #999;
+  --placeholder-opacity: 0.8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Focus state for inputs */
+ion-input.has-focus {
+  border-color: var(--primary-color);
+}
+
+/* Pincode and City Row */
+.pincode-city-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.pincode-item {
+  flex: 1;
+  min-width: 120px; /* Minimum width to prevent squishing */
+}
+
+.city-item {
+  flex: 2;
+  min-width: 150px; /* Minimum width to prevent squishing */
+}
+
+/* Error messages */
+.error-message {
+  color: #ff3b30;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-left: 2px;
+}
+
+/* Required field indicator */
+.required {
+  color: #ff3b30;
+}
+
+/* Adjust confirm button section to reduce gap */
+.confirm-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 15px 20px;
+  background-color: white;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  /* Remove any top margin that might be creating a gap */
+  margin-top: 0;
+}
+
+/* Ensure content has enough padding at bottom for fixed button */
+ion-content {
+  --padding-bottom: 80px; /* Adjust based on confirm button height + padding */
+}
+
+/* Fix potential issue with last section margin */
+.booking-section:last-of-type {
+  margin-bottom: 70px; /* Ensure last section doesn't crowd the button */
+}
+
+
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .pincode-city-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .pincode-item, .city-item {
+    width: 100%;
+  }
+}
+
+.professional-alert {
+  --background: white;
+  --max-width: 80%;
+  --border-radius: 10px;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  
+  .alert-wrapper {
+    border-radius: 10px;
+  }
+  
+  .alert-head {
+    text-align: center;
+    padding-top: 24px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eeeeee;
+  }
+  
+  /* More specific selector to override browser styles */
+  .alert-title.sc-ion-alert-md, 
+  .alert-title.sc-ion-alert-ios {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+  }
+  
+  .alert-message {
+    color: #666666 !important;
+    text-align: center;
+    font-size: 15px;
+    padding: 20px;
+    color: --var(--text-color);
+  }
+  
+  .alert-button-group {
+    padding: 10px 20px 20px;
+    justify-content: center;
+  }
+  
+  .alert-button {
+    --background: #4a90e2;
+    --background-hover: #3a80d2;
+    --color: white;
+    --border-radius: 6px;
+    font-weight: 500;
+    min-width: 120px;
+    height: 42px;
+  }
+}

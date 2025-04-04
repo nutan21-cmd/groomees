@@ -1,0 +1,61 @@
+  <ion-header [translucent]="true" color="text-color">
+      <ion-toolbar>
+        <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+      </ion-toolbar>
+    </ion-header> 
+      <ion-content class="ion-padding" *ngIf="contentTypeData">
+        <div class="card-section">
+          <swiper-container class="mySwiper banner-image" pagination="true" pagination-clickable="true"  space-between="30"
+          centered-slides="true" autoplay-delay="2500" autoplay-disable-on-interaction="false">
+          <swiper-slide *ngFor="let banner of contentTypeData.OFFER; let i = index">
+            <div 
+              class="banner-slide" 
+              (click)="navigateToBannerDetail(banner._id)"
+              [style.background-image]="'url(' + banner.imageUrl + ')'"
+            >
+            </div>
+          </swiper-slide>             
+        </swiper-container>
+        </div>
+   
+
+  <div class="card-section">
+    <ion-label class="text-color">Categories</ion-label>
+    <div class="services-grid" >
+      <div 
+        class="service-item" 
+        *ngFor="let category of categories"
+        (click)="onCategoriesSelect(category._id)"
+      >
+        <div class="service-image-container">
+          <img [src]="category.imageUrl" [alt]="category.title" class="service-image">
+        </div>
+        <ion-label class="service-name">{{ category.title }}</ion-label>
+      </div>
+    </div>
+  </div>
+
+ 
+
+  <!-- packages -->
+   <div class="card-section">
+    <ion-label class="text-color">Packages</ion-label>
+    <div class="package-grid" >
+      <div class="service-header" *ngFor="let package of contentTypeData.PACKAGE" (click)="onPackageSelect(package._id)">
+        <div class="service-info">
+          <img [src]="package.imageUrl" [alt]="package.title" class="service-icon">
+          <div class="service-details" *ngIf="package.title || package.description">
+            <h3 class="service-title" *ngIf="package.title">{{ package.title }}</h3>
+            <p class="service-description" *ngIf="package.description">{{ package.description }}</p>
+          </div>
+          <span class="service-price">₹{{ package.price }}</span>
+        </div>
+      </div>
+    </div>
+   </div>
+
+</ion-content>
+
+
+
+

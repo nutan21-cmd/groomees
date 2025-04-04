@@ -1,0 +1,298 @@
+<!-- app.component.html -->
+<div class="card">
+  <p-toast></p-toast>
+  
+  <p-tabView (onTabChange)="onTabChange($event)">
+    <!-- PACKAGES TAB -->
+    <p-tabPanel header="Packages">
+      <p-toolbar>
+        <div class="p-toolbar-group-start">
+          <p-button label="New Package" icon="pi pi-plus" (onClick)="openNew('package')"></p-button>
+        </div>
+      </p-toolbar>
+      
+      <p-table #dt [value]="getFilteredItems('PACKAGE')" [rows]="10" [paginator]="true" 
+               [globalFilterFields]="['title','contentDescription']" responsiveLayout="scroll"
+               [rowHover]="true" dataKey="_id"
+               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+               [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <h5 class="m-0">Manage Packages</h5>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text"(input)="onGlobalFilter($event, dt)" 
+                     placeholder="Search..." />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+            <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="item"></p-tableCheckbox>
+            </td>
+            <td>{{item.title}}</td>
+            <td>{{item.price | currency:'USD'}}</td>
+            <td style="max-width: 20rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              {{item.contentDescription}}
+            </td>
+            <td>
+              <img [src]="item.imageUrl" [alt]="item.title" width="100" class="shadow-2" />
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                      (click)="editItem(item)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                      (click)="deleteItem(item)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex align-items-center justify-content-between">
+            In total there are {{getFilteredItems('PACKAGE').length}} packages.
+          </div>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+    
+    <!-- OFFERS TAB -->
+    <p-tabPanel header="Offers">
+      <p-toolbar>
+        <div class="p-toolbar-group-start">
+          <p-button label="New Offer" icon="pi pi-plus" (onClick)="openNew('offer')"></p-button>
+        </div>
+      </p-toolbar>
+      
+      <p-table #dtOffers [value]="getFilteredItems('OFFER')" [rows]="10" [paginator]="true" 
+               [globalFilterFields]="['title','contentDescription']" responsiveLayout="scroll"
+               [rowHover]="true" dataKey="_id"
+               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+               [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <h5 class="m-0">Manage Offers</h5>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text"  
+              (input)="onGlobalFilter($event, dtOffers)"
+              placeholder="Search..." />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+            <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="item"></p-tableCheckbox>
+            </td>
+            <td>{{item.title}}</td>
+            <td>{{item.price | currency:'USD'}}</td>
+            <td style="max-width: 20rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              {{item.contentDescription}}
+            </td>
+            <td>
+              <img [src]="item.imageUrl" [alt]="item.title" width="100" class="shadow-2" />
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                      (click)="editItem(item)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                      (click)="deleteItem(item)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex align-items-center justify-content-between">
+            In total there are {{getFilteredItems('OFFER').length}} offers.
+          </div>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+    
+    <!-- CATEGORIES TAB -->
+    <p-tabPanel header="Categories">
+      <p-toolbar>
+        <div class="p-toolbar-group-start">
+          <p-button label="New Category" icon="pi pi-plus" (onClick)="openNew('category')"></p-button>
+        </div>
+      </p-toolbar>
+      
+      <p-accordion>
+        <p-accordionTab *ngFor="let category of categories" [header]="category.title">
+          <div class="flex flex-column md:flex-row mb-4">
+            <div class="w-full md:w-4 flex align-items-center justify-content-center">
+              <img [src]="category.imageUrl" [alt]="category.title" width="200" class="shadow-4" />
+            </div>
+            <div class="w-full md:w-8 ml-0 md:ml-4 pt-4 md:pt-0">
+              <h3>{{category.title}}</h3>
+              <div class="flex justify-content-end">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                        (click)="editCategory(category)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteCategory(category)"></button>
+              </div>
+              
+              <p-table [value]="category.items || []" [rows]="5" [paginator]="true" 
+                       responsiveLayout="scroll" [rowHover]="true" dataKey="_id" 
+                       styleClass="mt-4" [tableStyle]="{'min-width': '60rem'}">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+                    <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{item.title}}</td>
+                    <td>{{item.price | currency:'USD'}}</td>
+                    <td style="max-width: 15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                      {{item.contentDescription}}
+                    </td>
+                    <td>
+                      <img [src]="item.imageUrl" [alt]="item.title" width="70" class="shadow-2" />
+                    </td>
+                    <td>
+                      <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                              (click)="editItem(item)"></button>
+                      <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                              (click)="deleteItem(item)"></button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center p-4">No items found in this category.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </p-tabPanel>
+  </p-tabView>
+  
+  <!-- ITEM DIALOG -->
+  <p-dialog [(visible)]="itemDialog" [style]="{width: '650px'}" header="Treatment Details" [modal]="true">
+    <form [formGroup]="treatmentForm" (ngSubmit)="saveTreatment()">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="title">Title</label>
+          <input id="title" pInputText formControlName="title" />
+          <small *ngIf="submitted && treatmentForm.controls['title'].invalid" class="p-error">Title is required.</small>
+        </div>
+  
+        <div class="p-field">
+          <label for="price">Price</label>
+          <input id="price" type="number" pInputText formControlName="price" />
+          <small *ngIf="submitted && treatmentForm.controls['price'].invalid" class="p-error">Price must be greater than 0.</small>
+        </div>
+  
+        <div class="p-field">
+          <label for="contentDescription">Description</label>
+          <textarea id="contentDescription" pInputTextarea formControlName="contentDescription"></textarea>
+          <small *ngIf="submitted && treatmentForm.controls['contentDescription'].invalid" class="p-error">Description is required.</small>
+        </div>
+  
+        <div class="p-field">
+          <label for="contentHighlights">Highlights</label>
+          <textarea id="contentHighlights" pInputTextarea formControlName="contentHighlights"></textarea>
+          <small *ngIf="submitted && treatmentForm.controls['contentHighlights'].invalid" class="p-error">Highlights are required.</small>
+        </div>
+  
+        <div class="p-field">
+          <label for="imageUrl">Image URL</label>
+          <input id="imageUrl" pInputText formControlName="imageUrl" />
+          <small *ngIf="submitted && treatmentForm.controls['imageUrl'].invalid" class="p-error">Image URL is required.</small>
+        </div>
+      </div>
+  
+      <div class="p-dialog-footer">
+        <button pButton type="button" label="Cancel" icon="pi pi-times" (click)="hideDialog()"></button>
+        <button pButton type="submit" label="Save" icon="pi pi-check"></button>
+      </div>
+    </form>
+  </p-dialog>
+  
+  <!-- CATEGORY DIALOG -->
+  <p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}" header="Category Details" [modal]="true" 
+            styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="categoryTitle">Title</label>
+        <input type="text" pInputText id="categoryTitle" [(ngModel)]="selectedCategory.title" required autofocus 
+               [ngClass]="{'ng-invalid ng-dirty': submitted && !selectedCategory.title}"/>
+        <small class="ng-dirty ng-invalid" *ngIf="submitted && !selectedCategory.title">Title is required.</small>
+      </div>
+      
+      <div class="field">
+        <label for="categoryImageUrl">Image URL</label>
+        <input type="text" pInputText id="categoryImageUrl" [(ngModel)]="selectedCategory.imageUrl" required 
+               [ngClass]="{'ng-invalid ng-dirty': submitted && !selectedCategory.imageUrl}"/>
+        <small class="ng-dirty ng-invalid" *ngIf="submitted && !selectedCategory.imageUrl">Image URL is required.</small>
+      </div>
+      
+      <div class="field" *ngIf="selectedCategory.imageUrl">
+        <label>Image Preview</label>
+        <div class="flex justify-content-center">
+          <img [src]="selectedCategory.imageUrl" [alt]="selectedCategory.title" width="200" class="shadow-4" />
+        </div>
+      </div>
+    </ng-template>
+    
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveCategory()"></button>
+    </ng-template>
+  </p-dialog>
+  
+  <!-- DELETE ITEM DIALOG -->
+  <p-dialog [(visible)]="deleteItemDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span>Are you sure you want to delete <b>{{selectedItem.title}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteItemDialog = false"></button>
+      <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteItem()"></button>
+    </ng-template>
+  </p-dialog>
+  
+  <!-- DELETE CATEGORY DIALOG -->
+  <p-dialog [(visible)]="deleteCategoryDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span>Are you sure you want to delete <b>{{selectedCategory.title}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteCategoryDialog = false"></button>
+      <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteCategory()"></button>
+    </ng-template>
+  </p-dialog>
+</div>

@@ -1,0 +1,64 @@
+<ion-content class="ion-padding"> 
+  <div class="login-container text-color"> 
+    <h1 class="login-title">Login</h1>
+    
+    <p class="login-description">
+      To start buying services please provide us with the following details.
+    </p>
+    
+    <form [formGroup]="loginForm">
+      <p class="mobile-instruction">
+        Please enter your mobile number
+      </p>
+      
+      <div class="phone-input-container">
+        <ion-item lines="none" class="phone-input text-color">
+          <div slot="start" class="country-code">+91 -</div>
+          <ion-input 
+          placeholder="Mobile number" 
+          formControlName="phone"
+          type="tel"
+          color="text-color"
+        ></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="loginForm.get('phone')?.invalid && loginForm.get('phone')?.touched">
+          Please enter a valid 10-digit mobile number.
+        </div>
+      </div>
+      
+      <ion-button 
+        expand="block" 
+        class="send-otp-button" 
+        (click)="sendOtp()" 
+        *ngIf="!otpSent"
+        color="primary"
+      >
+        Send OTP
+      </ion-button>
+
+      <div class="phone-input-container" *ngIf="otpSent">
+        <p class="otp-instruction">Enter the OTP sent to your mobile number</p>
+        <ion-item lines="none" class="phone-input text-color">
+          <ion-input 
+            placeholder="Enter OTP" 
+            formControlName="code"            
+            type="text"
+            maxlength="6"
+            color="text-color"
+          ></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="loginForm.get('code')?.invalid && loginForm.get('code')?.touched">
+          Please enter a valid 6-digit OTP.
+        </div>
+        <ion-button 
+          expand="block" 
+          class="verify-otp-button" 
+          (click)="verifyOtp()"
+        >
+          Verify OTP
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>
+

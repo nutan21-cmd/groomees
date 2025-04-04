@@ -1,0 +1,24 @@
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" >
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="package-grid" >
+    <div class="service-header card-section" *ngFor="let treatment of treatments" (click)="onTreatmentSelect(treatment._id)">
+      <div class="service-info">
+        <img [src]="treatment.imageUrl" [alt]="treatment.title" class="service-icon">
+        <div class="service-details" *ngIf="treatment.title || treatment.description">
+          <h3 class="text-color" *ngIf="treatment.title">{{ treatment.title }}</h3>
+        </div>
+        <span class="service-price">₹{{ treatment.price }}</span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

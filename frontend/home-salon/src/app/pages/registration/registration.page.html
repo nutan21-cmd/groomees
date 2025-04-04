@@ -1,0 +1,99 @@
+<ion-content>
+  <div class="registration-container">
+    <h1 class="form-title" *ngIf="profile === 'user'; else registrationTitle">Profile</h1>
+    <ng-template #registrationTitle>
+      <h1 class="form-title">Registration</h1>
+    </ng-template>  
+
+
+    <p class="form-subtitle"  *ngIf="profile === 'user'; else subtitile">Update your profile</p>
+    <ng-template #subtitile>
+      <p class="form-subtitle">Please fill in your details to register</p>
+    </ng-template>
+
+    <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h2 class="section-title text-color">Personal Information</h2>
+        
+        <div class="form-row">
+          <ion-item class="form-input">
+            <ion-label position="floating" class="text-color">First Name</ion-label>
+            <ion-input formControlName="firstName" class="text-color" type="text"></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="f['firstName']?.invalid && f['firstName']?.touched">
+            First Name is required.
+          </div>
+          
+          <ion-item class="form-input">
+            <ion-label position="floating" class="text-color">Last Name</ion-label>
+            <ion-input formControlName="lastName" class="text-color" type="text"></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="f['lastName']?.invalid && f['lastName']?.touched">
+            Last Name is required.
+          </div>
+        </div>
+
+        <ion-item class="form-input">
+          <ion-label position="floating" class="text-color">Email</ion-label>
+          <ion-input formControlName="email" class="text-color" type="email"></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="f['email']?.invalid && f['email']?.touched">
+          <span *ngIf="f['email']?.errors?.['required']">Email is required.</span>
+          <span *ngIf="f['email']?.errors?.['email']">Please enter a valid email address.</span>
+        </div>
+      </div>
+
+      <!-- Address Section -->
+      <div class="form-section">
+        <h2 class="section-title text-color">Address</h2>
+        
+        <div class="form-row">
+          <ion-item class="form-input">
+            <ion-label position="floating" class="text-color">Flat/House No.</ion-label>
+            <ion-input formControlName="flat" class="text-color" type="text"></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="f['flat']?.invalid && f['flat']?.touched">
+            Flat/House No. is required.
+          </div>
+          
+          <ion-item class="form-input">
+            <ion-label position="floating" class="text-color">Area/Street</ion-label>
+            <ion-input formControlName="area" class="text-color" type="text"></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="f['area']?.invalid && f['area']?.touched">
+            Area/Street is required.
+          </div>
+        </div>
+
+        <ion-item class="form-input">
+          <ion-label position="floating" class="text-color">Landmark</ion-label>
+          <ion-input formControlName="landmark" class="text-color" type="text"></ion-input>
+        </ion-item>
+
+        <div class="form-row">
+          <ion-item class="form-input">
+            <ion-label position="floating" class="text-color">Pincode</ion-label>
+            <ion-input formControlName="pincode" class="text-color" type="text"></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="f['pincode']?.invalid && f['pincode']?.touched">
+            <span *ngIf="f['pincode']?.errors?.['required']">Pincode is required.</span>
+            <span *ngIf="f['pincode']?.errors?.['pattern']">Pincode must be a 6-digit number.</span>
+          </div>
+          
+          <ion-item class="form-input">
+            <ion-label position="floating" class="text-color">City</ion-label>
+            <ion-input formControlName="city" class="text-color" type="text"></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="f['city']?.invalid && f['city']?.touched">
+            City is required.
+          </div>
+        </div>
+      </div>
+      <ion-button expand="block" type="submit" class="submit-button">
+        <span *ngIf="profile === 'user'; else submitBtn">Update</span>
+        <ng-template #submitBtn>Register</ng-template>  
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,121 @@
+/* beauty-salon-promo.page.scss */
+
+// Ensures the page background is white and consistent across different devices
+.page-container {
+    --background: white;
+  }
+  
+  // Positioning the back button absolutely allows it to float over other content
+  // This creates a non-intrusive navigation element that doesn't disrupt the layout
+  .back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10; // Ensures the back button appears above other page elements
+  }
+  
+  // Promo header styling with several key design considerations:
+  // 1. Bright orange background to grab attention
+  // 2. Relative positioning for nested elements
+  // 3. Centered text for a clean, focused look
+  .promo-header {
+    background-color: #FFA500; // Vibrant orange to match the original design
+    padding: 15px;
+    position: relative;
+  
+    .header-content {
+      text-align: center;
+      position: relative;
+  
+      // Bold, prominent salon name
+      h1 {
+        color: #000;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+      }
+  
+      // Spring offer tag positioned in the top-right 
+      // Creates visual interest and highlights the seasonal promotion
+      .spring-offer-tag {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #FFA500;
+        padding: 5px;
+        font-size: 12px;
+      }
+    }
+  }
+  
+  // Hero section with responsive image and overlay design
+  .hero-section {
+    position: relative;
+  
+    // Ensures image fills width while maintaining aspect ratio
+    img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover; // Prevents image distortion
+    }
+  
+    // Discount overlay styled to stand out and provide key promotion information
+    .discount-overlay {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background-color: #FFA500; // Consistent color scheme
+      padding: 15px;
+      border-radius: 8px; // Soft corners for a modern look
+  
+      // Large, attention-grabbing discount percentage
+      h2 {
+        font-size: 22px;
+        font-weight: bold;
+        margin: 0 0 5px 0;
+      }
+  
+      // Smaller text for additional context
+      p {
+        font-size: 12px;
+        margin: 0;
+      }
+    }
+  }
+  
+  // Offer title styling for clear, prominent text
+  .offer-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  // Adds some spacing to the description for better readability
+  .offer-description {
+    margin-bottom: 15px;
+  }
+  
+  // Highlights section with a subtle background to draw attention
+  .offer-highlights {
+    background-color: #f4f4f4; // Light grey background for visual separation
+    padding: 15px;
+    border-radius: 8px; // Soft corners for a modern, clean look
+    margin-bottom: 15px;
+  
+    // Bold header for the highlights section
+    h4 {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  
+    // Styled list with proper indentation and spacing
+    ul {
+      padding-left: 20px; // Indent list items
+      margin: 0;
+  
+      // Add some spacing between list items for better readability
+      li {
+        margin-bottom: 5px;
+      }
+    }
+  }

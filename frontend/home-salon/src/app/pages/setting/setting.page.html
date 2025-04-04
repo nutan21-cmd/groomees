@@ -1,0 +1,49 @@
+<ion-header [translucent]="true" color="text-color">
+  <ion-toolbar>
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+  </ion-toolbar>
+</ion-header> 
+
+<!-- account.page.html -->
+<ion-header class="profile-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="dark"></ion-back-button>
+    </ion-buttons>
+    <div class="profile-container">
+      <div class="profile-icon">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </div>
+      <div class="profile-info">
+        <h2>My Account</h2>
+      </div>
+    </div>
+    <h5 *ngIf="username" slot="end" class="text-color username">Hi, {{username}}</h5>
+    <ion-buttons slot="end">
+      <ion-button class="edit-button" (click)="onEditProfile()">
+        <ion-icon size="medium" name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list lines="full">
+    <ion-item (click)="onAboutClick()">
+      <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+      <ion-label>About</ion-label>
+      <ion-icon name="chevron-forward" slot="end"></ion-icon>
+    </ion-item>
+
+    <ion-item (click)="onHelpClick()">
+      <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+      <ion-label>Help</ion-label>
+      <ion-icon name="chevron-forward" slot="end"></ion-icon>
+    </ion-item>
+
+    <ion-item lines="none" (click)="onLogout()">
+      <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+      <ion-label color="danger">Log out</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

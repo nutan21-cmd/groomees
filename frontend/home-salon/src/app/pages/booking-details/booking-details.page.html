@@ -1,0 +1,144 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" color="text-color">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div class="service-header">
+    <div class="service-info">
+      <img [src]="imageUrl" alt="Beauty Plus Service" class="service-icon">
+      <!-- <span class="service-price">₹ 500</span> -->
+    </div>
+  </div>
+
+  <form [formGroup]="bookingForm">
+    <div class="booking-section">
+      <h2>Select Date <span class="required">*</span></h2>
+      <div class="date-scroll-container">
+        <div class="date-selector">
+          <ion-chip 
+            *ngFor="let date of availableDates" 
+            (click)="selectDate(date)"
+            [class.selected]="bookingForm.get('selectedDate')?.value === date"
+          >
+            {{ date }}
+          </ion-chip>
+        </div>
+        <div class="error-message" *ngIf="bookingForm.get('selectedDate')?.invalid && bookingForm.get('selectedDate')?.touched">
+          Date is required.
+        </div>
+      </div>
+    </div>
+    
+    <div class="booking-section">
+      <h2>Available Slots <span class="required">*</span></h2>
+      <div class="slot-selector-scroller">
+        <div class="slot-selector">
+          <ion-chip 
+            *ngFor="let slot of availableSlots" 
+            (click)="selectSlot(slot)"
+            [class.selected]="bookingForm.get('selectedSlot')?.value === slot"
+          >
+            {{ slot }}
+          </ion-chip>
+        </div>
+        <div class="error-message" *ngIf="bookingForm.get('selectedSlot')?.invalid && bookingForm.get('selectedSlot')?.touched">
+          Time slot is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-section">
+      <span>
+        <h2>Where do you want to take this service?</h2>
+      </span>
+
+      <div class="form-container" formGroupName="address">
+        <ion-item class="ion-margin-bottom">
+          <ion-input 
+            formControlName="flat"
+            placeholder="Flat/House no./ Building/Company/ Apartment"
+          ></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="bookingForm.get('address.flat')?.invalid && bookingForm.get('address.flat')?.touched">
+          Flat/House number is required.
+        </div>
+      
+        <ion-item class="ion-margin-bottom">
+          <ion-input 
+            formControlName="area"
+            placeholder="Area/Street/Sector/Village"
+          ></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="bookingForm.get('address.area')?.invalid && bookingForm.get('address.area')?.touched">
+          Area/Street is required.
+        </div>
+      
+        <ion-item class="ion-margin-bottom">
+          <ion-input 
+            formControlName="landmark"
+            placeholder="Landmark"
+          ></ion-input>
+        </ion-item>
+      
+        <div class="pincode-city-row ion-margin-bottom">
+          <ion-item class="pincode-item">
+            <ion-input 
+              formControlName="pincode"
+              type="text" 
+              maxlength="6"
+              placeholder="6-digit Pincode"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="bookingForm.get('address.pincode')?.invalid && bookingForm.get('address.pincode')?.touched">
+            <span *ngIf="bookingForm.get('address.pincode')?.errors?.['required']">
+              Pincode is required.
+            </span>
+            <span *ngIf="bookingForm.get('address.pincode')?.errors?.['pattern']">
+              Pincode must be a 6-digit number and cannot contain alphabets.
+            </span>
+          </div>
+      
+          <ion-item class="city-item">
+            <ion-input 
+              formControlName="city"
+              placeholder="Enter city"
+            ></ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="bookingForm.get('address.city')?.invalid && bookingForm.get('address.city')?.touched">
+            City is required.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="confirm-section">
+      <ion-button 
+      color = "primary"
+        expand="block" 
+        (click)="confirmSchedule()"
+      >
+        Confirm Schedule
+      </ion-button>
+    </div>
+  </form>
+  <!-- <ion-alert
+  [isOpen]="isAlertOpen"
+  header="Booking Confirmed!"
+  message="Thank you for booking with us. Your appointment has been successfully scheduled."
+></ion-alert> -->
+
+<ion-alert
+  [isOpen]="isAlertOpen"
+  cssClass="professional-alert"
+  header="Booking Confirmed!"
+  message="Thank you for choosing Groomees. Your appointment has been confirmed. We advice you to make upi payment to our service provider(you can also pay in cash)"
+  [buttons]="alertButtons"
+
+    ></ion-alert>
+
+
+</ion-content>
