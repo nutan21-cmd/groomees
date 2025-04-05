@@ -19,12 +19,12 @@ services:
     volumes:
       - ./db_data:/data/db/
 
-nginx:
-    restart: unless-stopped
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    depends_on:
-      - api
-    ports:
-      - "80:80"
+  nginx:
+      restart: unless-stopped
+      build:
+        dockerfile: Dockerfile
+        context: ./nginx
+      depends_on:
+        - api
+      ports:
+        - "80:80"
