@@ -66,3 +66,4 @@ frontend/home-salon/typings
 frontend/home-salon/.DS_Store
 frontend/home-salon/Thumbs.db
 db_data
+.env
