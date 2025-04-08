@@ -35,16 +35,8 @@
                 "output": "assets"
               }
             ],
-          "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ],
-            "styles": [
-              "src/global.scss",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/primeicons/primeicons.css"
- 
-            ],
+            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "scripts": [],
             "browser": "src/main.ts"
           },
           "configurations": {
@@ -117,16 +109,8 @@
                 "output": "assets"
               }
             ],
-            "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ],
-            "styles": [
-              "src/global.scss",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/primeicons/primeicons.css"
-
-            ]
+            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "scripts": []
           },
           "configurations": {
             "ci": {

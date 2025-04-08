@@ -1,19 +1,18 @@
-
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { HttpClient ,HttpClientModule} from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-
+import { IonButton, IonInput, IonItem, IonContent } from '@ionic/angular/standalone';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { ApiService } from 'src/app/services/api.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
+  providers: [ApiService],
   imports: [
-    IonicModule, 
+    IonContent, IonButton, IonInput, IonItem, 
     CommonModule, 
     FormsModule,
     ReactiveFormsModule,
@@ -21,6 +20,8 @@ import { ActivatedRoute } from '@angular/router';
   ]
 })
 export class LoginPage implements OnInit {
+  @ViewChild('phoneInput') phoneInput!: IonInput;
+  @ViewChild('otpInput', { static: false }) otpInput!: IonInput;
 
   phoneNumber: string = '';
   id: string | null = null;
@@ -28,75 +29,99 @@ export class LoginPage implements OnInit {
   code: string = ''; // To store the entered OTP
   otpSent: boolean = false; // To track if OTP has been sent
   loginForm: FormGroup; // Reactive form
-  contentType: string | null = null; // To store the type parameter
-  user:any
-  apiUrl:string= "http://localhost:3000/api"
+  user: any;
+  imageUrl: string | null = null; // To store the image URL
   
-  // otpSent: boolean = false;
-
-  constructor(private fb:FormBuilder, private http: HttpClient,private router: Router, private route: ActivatedRoute) {   
-        // Initialize the reactive form
-        this.loginForm = this.fb.group({
-          phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // 10-digit mobile number
-          code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]], // 6-digit OTP
-        });
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router, 
+    private route: ActivatedRoute,
+    private apiService: ApiService
+  ) {   
+    // Initialize the reactive form
+    this.loginForm = this.fb.group({
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // 10-digit mobile number
+      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]], // 6-digit OTP
+    });
   }
-
-
+  ionViewDidEnter() {
+    this.phoneInput.setFocus();
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      this.contentType = params['contentType'];
-      this.id = params['id'] // Retrieve the type parameter
-      console.log('tyoe:', this.contentType);
+      this.imageUrl = params['imageUrl'];
+      this.id = params['id']; // Retrieve the type parameter
     });
-    this.user=JSON.stringify(localStorage.getItem('user'));
+    
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      try {
+        this.user = JSON.parse(userString);
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        this.user = null;
+      }
+    }
     console.log('user:', this.user);
   }
+  
 
   sendOtp() {
-    // this.router.navigate(['/registration'], {queryParams: {type: this.contentType,id:this.id}});
     const phone = `+91${this.loginForm.get('phone')?.value}`;
-    console.log('Phone value from form:', this.loginForm.get('phone')?.value); // Debugging log
-    console.log('Sending OTP to:', phone);
-  
     if (this.loginForm.get('phone')?.valid) {
-      this.http.post(`${this.apiUrl}/twilio/send-otp`, { phone }).subscribe(
-        (response: any) => {
+      this.apiService.sendOtp(phone).subscribe({
+        next: (response: any) => {
           console.log('OTP sent successfully:', response);
-          this.otpSent = true; // Show the OTP input field
+          this.otpSent = true;
+          setTimeout(() => {
+            if (this.otpInput) {
+              this.otpInput.setFocus().catch(err => console.error('Failed to focus OTP input:', err));
+            }
+          }, 300);
         },
-        (error) => {
+        error: (error) => {
           console.error('Error sending OTP:', error);
         }
-      );
-    } 
+      });
+    } else {
+      alert('Please enter a valid phone number.');
+    }
   }
   
   verifyOtp() {
-    this.router.navigate(['/registration'], {queryParams: {type: this.contentType,id:this.id}});
-
     const phone = `+91${this.loginForm.get('phone')?.value}`;
     const code = this.loginForm.get('code')?.value;
-  //   if (this.loginForm.get('code')?.valid) {
-  //     this.http.post(`${this.apiUrl}/twilio/verify-otp`, { phone, code }).subscribe(
-  //       (response: any) => {
-  //         console.log('OTP verified successfully:', response);
-  //         if(Object.keys(response.user).length !== 0){
-  //           localStorage.setItem('user', JSON.stringify(response.user));
-  //           this.router.navigate(['/booking-details'], {queryParams: {contentType: this.contentType,id:this.id,phone:this.loginForm.get('phone')?.value}});
-  //         }
-  //         else
-  //           this.router.navigate(['/registration'], {queryParams: {contentType: this.contentType,id:this.id,phone:this.loginForm.get('phone')?.value}});
-  // },
-  //       (error) => {
-  //         console.error('Error verifying OTP:', error);
-  //         alert('Failed to verify OTP. Please try again.');
-  //       }
-  //     );
-  //   } else {
-  //     alert('Please enter a valid 6-digit OTP.');
-  //   }
-  }
-  }
 
+    if (this.loginForm.get('code')?.valid) {
+      this.apiService.verifyOtp(phone, code).subscribe({
+        next: (response: any) => {
+          console.log('OTP verified successfully:', response);
+          if (response.user && Object.keys(response.user).length !== 0) {
+            localStorage.setItem('user', JSON.stringify(response.user));
+            this.router.navigate(['/booking-details'], {
+              queryParams: {
+                imageUrl: this.imageUrl,
+                id: this.id,
+                phone: this.loginForm.get('phone')?.value
+              }
+            });
+          } else {
+            this.router.navigate(['/registration'], {
+              queryParams: {
+                id: this.id,
+                phone: this.loginForm.get('phone')?.value
+              }
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error verifying OTP:', error);
+          alert('Failed to verify OTP. Please try again.');
+        }
+      });
+    } else {
+      alert('Please enter a valid 6-digit OTP.');
+    }
+  }
+}

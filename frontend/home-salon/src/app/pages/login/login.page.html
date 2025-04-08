@@ -14,12 +14,12 @@
       <div class="phone-input-container">
         <ion-item lines="none" class="phone-input text-color">
           <div slot="start" class="country-code">+91 -</div>
-          <ion-input 
-          placeholder="Mobile number" 
-          formControlName="phone"
-          type="tel"
-          color="text-color"
-        ></ion-input>
+          <ion-input #phoneInput
+            aria-label="phoneNumber" 
+            value="example"
+            placeholder="Mobile number" 
+            formControlName="phone"
+          ></ion-input>
         </ion-item>
         <div class="error-message" *ngIf="loginForm.get('phone')?.invalid && loginForm.get('phone')?.touched">
           Please enter a valid 10-digit mobile number.
@@ -40,6 +40,7 @@
         <p class="otp-instruction">Enter the OTP sent to your mobile number</p>
         <ion-item lines="none" class="phone-input text-color">
           <ion-input 
+            #otpInput
             placeholder="Enter OTP" 
             formControlName="code"            
             type="text"
@@ -61,4 +62,3 @@
     </form>
   </div>
 </ion-content>
-

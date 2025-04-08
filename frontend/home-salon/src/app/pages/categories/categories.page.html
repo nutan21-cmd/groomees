@@ -10,7 +10,7 @@
 
 <ion-content class="ion-padding">
   <div class="package-grid" >
-    <div class="service-header card-section" *ngFor="let treatment of treatments" (click)="onTreatmentSelect(treatment._id)">
+    <div class="service-header card-section" *ngFor="let treatment of treatments" (click)="onTreatmentSelect(treatment)">
       <div class="service-info">
         <img [src]="treatment.imageUrl" [alt]="treatment.title" class="service-icon">
         <div class="service-details" *ngIf="treatment.title || treatment.description">

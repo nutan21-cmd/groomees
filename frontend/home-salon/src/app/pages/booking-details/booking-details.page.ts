@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient ,HttpClientModule} from '@angular/common/http';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { IonButton,IonBackButton,IonHeader,IonToolbar,IonAlert,IonChip,IonInput,IonButtons, IonItem, IonContent } from '@ionic/angular/standalone';
+import { ApiService } from 'src/app/services/api.service';
 
 
 @Component({
@@ -13,8 +14,13 @@ import { Router } from '@angular/router';
   templateUrl: './booking-details.page.html',
   styleUrls: ['./booking-details.page.scss'],
   standalone: true,
+  providers: [ApiService],
   imports: [
-    IonicModule, 
+    IonContent, IonButton, 
+    IonInput, IonButtons,IonChip,
+    IonAlert,IonToolbar,IonItem, 
+    IonHeader,
+    IonBackButton,
     CommonModule, 
     FormsModule,
     ReactiveFormsModule,
@@ -32,10 +38,14 @@ export class BookingDetailsPage implements OnInit {
   isAlertOpen = false;
   id: string | null = null;
   imageUrl: string | null = null;
-  contentType: string | null = null; 
-  apiUrl:string='http://localhost:3000/api'
+  apiUrl:string='http://34.131.137.64/api'
   user:any
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private http: HttpClient,private alertController: AlertController,private router: Router) {   
+  constructor(private route: ActivatedRoute,
+     private fb: FormBuilder,
+      private http: HttpClient,
+      private alertController: AlertController,
+      private apiService: ApiService,
+      private router: Router) {   
     this.bookingForm = this.fb.group({
       selectedDate: [null, Validators.required],
       selectedSlot: [null, Validators.required],
@@ -53,7 +63,6 @@ export class BookingDetailsPage implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.id = params['id'];
       this.imageUrl = params['imageUrl'];
-      this.contentType = params['contentType']; // Retrieve the contentType parameter
         // Check if address exists in local storage
   const userData = localStorage.getItem('user');
   if (userData) {
@@ -94,27 +103,27 @@ export class BookingDetailsPage implements OnInit {
     if (this.bookingForm.valid) {
       const formData = {
         ...this.bookingForm.value,
-        status:'confirmed',
-        treatmentId:this.id,
-        userId:this.user? this.user._id : null,
-      // Attach the booking ID
+        status: 'confirmed',
+        treatmentId: this.id,
+        userId: this.user ? this.user._id : null,
       };
-      const apiUrl = `${this.apiUrl}/bookings/create`;
-      this.http.post(apiUrl, formData).subscribe(
+  
+      this.apiService.createBooking(formData).subscribe(
         (response: any) => {
           console.log('Booking confirmed:', response);
-          this.isAlertOpen = true;    
-            },
+          this.isAlertOpen = true; // Open the alert
+        },
         (error) => {
           console.error('Error confirming booking:', error);
         }
       );
-    }else {
+    } else {
       // Mark all fields as touched to trigger validation messages
       this.bookingForm.markAllAsTouched();
     }
     console.log('Booking form data:', this.bookingForm.value);
   }
+  
   navigateToHome() {
     this.isAlertOpen = false; // Close the alert
     this.router.navigate(['/tabs/home']); // Navigate to the home page

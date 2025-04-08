@@ -1,205 +1,256 @@
-<!-- app.component.html -->
-<div class="card">
+<ion-header [translucent]="true">
+  <ion-toolbar color="light">
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+  </ion-toolbar>
+</ion-header> 
   <p-toast></p-toast>
-  
-  <p-tabView (onTabChange)="onTabChange($event)">
-    <!-- PACKAGES TAB -->
-    <p-tabPanel header="Packages">
-      <p-toolbar>
-        <div class="p-toolbar-group-start">
-          <p-button label="New Package" icon="pi pi-plus" (onClick)="openNew('package')"></p-button>
-        </div>
-      </p-toolbar>
-      
-      <p-table #dt [value]="getFilteredItems('PACKAGE')" [rows]="10" [paginator]="true" 
-               [globalFilterFields]="['title','contentDescription']" responsiveLayout="scroll"
-               [rowHover]="true" dataKey="_id"
-               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-               [showCurrentPageReport]="true">
-        <ng-template pTemplate="caption">
-          <div class="flex align-items-center justify-content-between">
-            <h5 class="m-0">Manage Packages</h5>
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input pInputText type="text"(input)="onGlobalFilter($event, dt)" 
-                     placeholder="Search..." />
-            </span>
+  <ion-content class="ion-padding">
+    <p-tabView (onTabChange)="onTabChange($event)">
+      <p-tabPanel header="Packages">
+        <p-toolbar>
+          <div class="p-toolbar-group-start">
+            <p-button label="New Package" icon="pi pi-plus" (onClick)="openNew('PACKAGE')"></p-button>
           </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th style="width: 3rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
-            <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
-            <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
-            <th>Description</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-item>
-          <tr>
-            <td>
-              <p-tableCheckbox [value]="item"></p-tableCheckbox>
-            </td>
-            <td>{{item.title}}</td>
-            <td>{{item.price | currency:'USD'}}</td>
-            <td style="max-width: 20rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              {{item.contentDescription}}
-            </td>
-            <td>
-              <img [src]="item.imageUrl" [alt]="item.title" width="100" class="shadow-2" />
-            </td>
-            <td>
-              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                      (click)="editItem(item)"></button>
-              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                      (click)="deleteItem(item)"></button>
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-          <div class="flex align-items-center justify-content-between">
-            In total there are {{getFilteredItems('PACKAGE').length}} packages.
-          </div>
-        </ng-template>
-      </p-table>
-    </p-tabPanel>
-    
-    <!-- OFFERS TAB -->
-    <p-tabPanel header="Offers">
-      <p-toolbar>
-        <div class="p-toolbar-group-start">
-          <p-button label="New Offer" icon="pi pi-plus" (onClick)="openNew('offer')"></p-button>
-        </div>
-      </p-toolbar>
-      
-      <p-table #dtOffers [value]="getFilteredItems('OFFER')" [rows]="10" [paginator]="true" 
-               [globalFilterFields]="['title','contentDescription']" responsiveLayout="scroll"
-               [rowHover]="true" dataKey="_id"
-               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-               [showCurrentPageReport]="true">
-        <ng-template pTemplate="caption">
-          <div class="flex align-items-center justify-content-between">
-            <h5 class="m-0">Manage Offers</h5>
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input pInputText type="text"  
-              (input)="onGlobalFilter($event, dtOffers)"
-              placeholder="Search..." />
-            </span>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th style="width: 3rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
-            <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
-            <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
-            <th>Description</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-item>
-          <tr>
-            <td>
-              <p-tableCheckbox [value]="item"></p-tableCheckbox>
-            </td>
-            <td>{{item.title}}</td>
-            <td>{{item.price | currency:'USD'}}</td>
-            <td style="max-width: 20rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              {{item.contentDescription}}
-            </td>
-            <td>
-              <img [src]="item.imageUrl" [alt]="item.title" width="100" class="shadow-2" />
-            </td>
-            <td>
-              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                      (click)="editItem(item)"></button>
-              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                      (click)="deleteItem(item)"></button>
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-          <div class="flex align-items-center justify-content-between">
-            In total there are {{getFilteredItems('OFFER').length}} offers.
-          </div>
-        </ng-template>
-      </p-table>
-    </p-tabPanel>
-    
-    <!-- CATEGORIES TAB -->
-    <p-tabPanel header="Categories">
-      <p-toolbar>
-        <div class="p-toolbar-group-start">
-          <p-button label="New Category" icon="pi pi-plus" (onClick)="openNew('category')"></p-button>
-        </div>
-      </p-toolbar>
-      
-      <p-accordion>
-        <p-accordionTab *ngFor="let category of categories" [header]="category.title">
-          <div class="flex flex-column md:flex-row mb-4">
-            <div class="w-full md:w-4 flex align-items-center justify-content-center">
-              <img [src]="category.imageUrl" [alt]="category.title" width="200" class="shadow-4" />
+        </p-toolbar>
+        
+        <p-table #dt  [value]="getFilteredItems('PACKAGE')" [rows]="10" [paginator]="true" 
+                 [globalFilterFields]="['title','contentDescription']" [resizableColumns]="false" responsiveLayout="scroll"
+                 [rowHover]="true" dataKey="_id"
+                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+                 [showCurrentPageReport]="true"
+                 [tableStyle]="{ 'min-width': '50rem' }">
+          <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+              <h5 class="m-0">Manage Packages</h5>
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text"(input)="onGlobalFilter($event, dt)" 
+                       placeholder="Search..." />
+              </span>
             </div>
-            <div class="w-full md:w-8 ml-0 md:ml-4 pt-4 md:pt-0">
-              <h3>{{category.title}}</h3>
-              <div class="flex justify-content-end">
+          </ng-template>
+          <!-- <ng-template pTemplate="header">
+
+            <tr>
+              <th style="width: 5%">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th pSortableColumn="title" style="width: 20% !important;">Title <p-sortIcon field="title"></p-sortIcon></th>
+              <th pSortableColumn="price" style="width: 15% !important;">Price <p-sortIcon field="price"></p-sortIcon></th>
+              <th style="width:40% !important">Description</th>
+              <th style="width: 15% !important;">Image</th>
+              <th style="width: 7% !important;">Actions</th>
+            </tr>
+          </ng-template> -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 5%">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+                <th pSortableColumn="title" style="width:33%">
+                    Title <p-sortIcon field="title" />
+                </th>
+                <th pSortableColumn="price" style="width:20%">
+                    Price <p-sortIcon field="price" />
+                </th>
+                <th  style="width:25%">
+                    Description 
+                </th>
+                <th pSortableColumn="category" style="width:20%">
+                    Image 
+                </th>
+                <th pSortableColumn="quantity" style="width:20%">
+                    Action 
+                </th>
+            </tr>
+        </ng-template>
+          <ng-template pTemplate="body" let-treatments>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="treatments"></p-tableCheckbox>
+              </td>
+              <td>{{treatments.title}}</td>
+              <td>{{treatments.price | currency:'USD'}}</td>
+              <td >
+                {{treatments.contentDescription}}
+              </td>
+              <td>
+                <img [src]="treatments.imageUrl" [alt]="treatments.title" class="shadow-2" />
+              </td>
+              <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                        (click)="editItem(treatments)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteItem(treatments)"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+              In total there are {{getFilteredItems('PACKAGE').length}} packages.
+            </div>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+      
+      <p-tabPanel header="Offers">
+        <p-toolbar>
+          <div class="p-toolbar-group-start">
+            <p-button label="New Offer" icon="pi pi-plus" (onClick)="openNew('OFFER')"></p-button>
+          </div>
+        </p-toolbar>
+        
+        <p-table #dtOffers [value]="getFilteredItems('OFFER')" [rows]="10" [paginator]="true" 
+                 [globalFilterFields]="['title','contentDescription']" responsiveLayout="scroll"
+                 [rowHover]="true" dataKey="_id"
+                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+                 [showCurrentPageReport]="true">
+          <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+              <h5 class="m-0">Manage Offers</h5>
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text"  
+                (input)="onGlobalFilter($event, dtOffers)"
+                placeholder="Search..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 5%">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+                <th pSortableColumn="title" style="width:33%">
+                    Title <p-sortIcon field="title" />
+                </th>
+                <th pSortableColumn="price" style="width:20%">
+                    Price <p-sortIcon field="price" />
+                </th>
+                <th  style="width:20%">
+                    Description 
+                </th>
+                <th  style="width:20%">
+                    Image 
+                </th>
+                <th  style="width:20%">
+                    Action 
+                </th>
+            </tr>
+        </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="item"></p-tableCheckbox>
+              </td>
+              <td>{{item.title}}</td>
+              <td>{{item.price | currency:'USD'}}</td>
+              <td>
+                {{item.contentDescription}}
+              </td>
+              <td>
+                <img [src]="item.imageUrl" [alt]="item.title" width="100" class="shadow-2" />
+              </td>
+              <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                        (click)="editItem(item)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteItem(item)"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+              In total there are {{getFilteredItems('OFFER').length}} offers.
+            </div>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+      
+      <p-tabPanel header="Categories">
+        <p-toolbar>
+          <div class="p-toolbar-group-start">
+            <p-button label="New Category" icon="pi pi-plus" (onClick)="openNew('CATEGORY')"></p-button>
+          </div>
+        </p-toolbar>
+      
+        <p-accordion>
+          <p-accordionTab *ngFor="let category of categories" [header]="category.title">
+            <div class="flex justify-content-between align-items-center">
+              <div>
+                <h3>{{ category.title }}</h3>
+              </div>
+              <div>
+                <!-- Edit and Delete Buttons in Accordion Header -->
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                         (click)="editCategory(category)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                         (click)="deleteCategory(category)"></button>
+                <!-- Add New Treatment Button -->
+                <button pButton pRipple label="Add Treatment" icon="pi pi-plus" class="p-button-text"
+                        (click)="openNew('TREATMENT', category._id)"></button>
               </div>
-              
-              <p-table [value]="category.items || []" [rows]="5" [paginator]="true" 
-                       responsiveLayout="scroll" [rowHover]="true" dataKey="_id" 
-                       styleClass="mt-4" [tableStyle]="{'min-width': '60rem'}">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
-                    <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-item>
-                  <tr>
-                    <td>{{item.title}}</td>
-                    <td>{{item.price | currency:'USD'}}</td>
-                    <td style="max-width: 15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                      {{item.contentDescription}}
-                    </td>
-                    <td>
-                      <img [src]="item.imageUrl" [alt]="item.title" width="70" class="shadow-2" />
-                    </td>
-                    <td>
-                      <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                              (click)="editItem(item)"></button>
-                      <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                              (click)="deleteItem(item)"></button>
-                    </td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr>
-                    <td colspan="5" class="text-center p-4">No items found in this category.</td>
-                  </tr>
-                </ng-template>
-              </p-table>
             </div>
-          </div>
-        </p-accordionTab>
-      </p-accordion>
-    </p-tabPanel>
-  </p-tabView>
+      
+            <div class="flex flex-column md:flex-row mb-4">
+              <div class="w-full md:w-4 flex align-items-center justify-content-center">
+                <img [src]="category.imageUrl" [alt]="category.title" width="200" class="shadow-4" />
+              </div>
+              <div class="w-full md:w-8 ml-0 md:ml-4 pt-4 md:pt-0">
+                <p-table 
+                  [value]="getCategoryTreatments(category._id)" 
+                  [rows]="5" 
+                  [paginator]="true" 
+                  responsiveLayout="scroll" 
+                  [rowHover]="true" 
+                  dataKey="_id" 
+                  styleClass="mt-4" 
+                  [tableStyle]="{'min-width': '60rem'}">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+                      <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+                      <th>Description</th>
+                      <th>Image</th>
+                      <th>Actions</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-item>
+                    <tr>
+                      <td>{{ item.title }}</td>
+                      <td>{{ item.price | currency:'USD' }}</td>
+                      <td style="max-width: 15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ item.contentDescription }}
+                      </td>
+                      <td>
+                        <img [src]="item.imageUrl" [alt]="item.title" width="70" class="shadow-2" />
+                      </td>
+                      <td>
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                                (click)="editItem(item)"></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                                (click)="deleteItem(item)"></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="5" class="text-center p-4">No items found in this category.</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </p-accordionTab>
+        </p-accordion>
+      </p-tabPanel>
+    </p-tabView>
+  </ion-content>
+
+
   
-  <!-- ITEM DIALOG -->
-  <p-dialog [(visible)]="itemDialog" [style]="{width: '650px'}" header="Treatment Details" [modal]="true">
+
+  <!-- <p-dialog [(visible)]="itemDialog" [style]="{width: '650px'}" header="Treatment Details" [modal]="true">
     <form [formGroup]="treatmentForm" (ngSubmit)="saveTreatment()">
       <div class="p-fluid">
         <div class="p-field">
@@ -238,9 +289,9 @@
         <button pButton type="submit" label="Save" icon="pi pi-check"></button>
       </div>
     </form>
-  </p-dialog>
+  </p-dialog> -->
   
-  <!-- CATEGORY DIALOG -->
+  
   <p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}" header="Category Details" [modal]="true" 
             styleClass="p-fluid">
     <ng-template pTemplate="content">
@@ -272,7 +323,7 @@
     </ng-template>
   </p-dialog>
   
-  <!-- DELETE ITEM DIALOG -->
+ 
   <p-dialog [(visible)]="deleteItemDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
@@ -284,8 +335,7 @@
     </ng-template>
   </p-dialog>
   
-  <!-- DELETE CATEGORY DIALOG -->
-  <p-dialog [(visible)]="deleteCategoryDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+  <p-dialog [(visible)]="deleteCategoryDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}"> -->
     <div class="flex align-items-center justify-content-center">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
       <span>Are you sure you want to delete <b>{{selectedCategory.title}}</b>?</span>
@@ -295,4 +345,132 @@
       <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteCategory()"></button>
     </ng-template>
   </p-dialog>
-</div>
+
+
+  <p-dialog [(visible)]="itemDialog" [style]="{width: '650px'}" header="Treatment Details" [modal]="true">
+    <ng-template #content>
+      <form [formGroup]="treatmentForm" (ngSubmit)="saveTreatment()">
+        <div class="flex flex-col gap-6">
+          <img
+          [src]="treatmentForm.get('imageUrl')?.value"
+          [alt]=" treatmentForm.get('imageUrl')?.value"
+          class="block m-auto pb-4"
+          *ngIf="treatmentForm.get('imageUrl')?.value"/>
+          <div>
+            <label for="name" class="block font-bold mb-3">Title</label>
+            <input
+              type="text"
+              pInputText
+              id="name"
+              formControlName="title"
+              required
+              autofocus
+              fluid
+            />
+            <small
+              *ngIf="submitted && treatmentForm.controls['title'].invalid"
+              class="p-error"
+            >
+              Title is required.
+            </small>
+          </div>
+          <div>
+            <label for="description" class="block font-bold mb-3">Description</label>
+            <textarea
+              id="description"
+              pTextarea
+              formControlName="contentDescription"
+              required
+              rows="4"
+              cols="45"
+              fluid
+            ></textarea>
+            <small
+              *ngIf="submitted && treatmentForm.controls['contentDescription'].invalid"
+              class="p-error"
+            >
+              Description is required.
+            </small>
+          </div>
+  
+          <div>
+            <label for="highlights" class="block font-bold mb-3">Highlights</label>
+            <textarea
+              id="highlights"
+              pTextarea
+              formControlName="contentHighlights"
+              required
+              rows="5"
+              cols="45"
+              fluid
+            ></textarea>
+            <small
+              *ngIf="submitted && treatmentForm.controls['contentHighlights'].invalid"
+              class="p-error"
+            >
+              Highlights are required.
+            </small>
+          </div>
+  
+          <div>
+            <label for="imageUrl" class="block font-bold mb-3">Image URL</label>
+            <input
+              type="text"
+              pInputText
+              id="imageUrl"
+              formControlName="imageUrl"
+              required
+              fluid
+            />
+          
+          
+          </div>
+  
+          <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+              <label for="price" class="block font-bold mb-3">Price</label>
+              <p-inputnumber
+                id="price"
+                formControlName="price"
+                mode="currency"
+                currency="USD"
+                locale="en-US"
+                fluid
+              ></p-inputnumber>
+              <small
+                *ngIf="submitted && treatmentForm.controls['price'].invalid"
+                class="p-error"
+              >
+                Price must be greater than 0.
+              </small>
+            </div>
+            <div class="col-span-6">
+              <label for="type" class="block font-bold mb-3">Type</label>
+              <input
+                type="text"
+                pInputText
+                id="type"
+                formControlName="type"
+                required
+                fluid
+              />
+              <small
+                *ngIf="submitted && treatmentForm.controls['type'].invalid"
+                class="p-error"
+              >
+                Type is required.
+              </small>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+  
+    <ng-template #footer>
+      <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
+      <p-button label="Save" icon="pi pi-check" (click)="saveTreatment()" />
+    </ng-template>
+  </p-dialog>
+
+
+

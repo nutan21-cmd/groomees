@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { InputText, InputTextModule } from 'primeng/inputtext';
+import { InputTextModule } from 'primeng/inputtext';
 import { InputTextarea } from 'primeng/inputtextarea';
 import { DialogModule } from 'primeng/dialog';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -26,6 +25,8 @@ import { AccordionModule } from 'primeng/accordion';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToolbarModule } from 'primeng/toolbar';
 import { MessageService } from 'primeng/api';
+import { IonContent,IonHeader,IonToolbar } from '@ionic/angular/standalone';
+import { ApiService } from 'src/app/services/api.service';
 
 interface Item {
   _id: string;
@@ -50,16 +51,12 @@ interface Category {
   templateUrl: './listings.page.html',
   styleUrls: ['./listings.page.scss'],
   standalone: true,
-  providers: [MessageService], // Add MessageService here
+  providers: [MessageService, ApiService], // Add MessageService here
   imports: [
-    IonContent,
     ButtonModule,
     InputTextModule,
     DialogModule,
-    IonHeader,
     TableModule,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     FormsModule,
     FormsModule,
@@ -80,6 +77,9 @@ interface Category {
     RippleModule,
     ConfirmDialogModule ,
     ReactiveFormsModule,
+    IonContent,
+    IonHeader,
+    IonToolbar
   ],
 })
 export class ListingsPage {
@@ -92,12 +92,13 @@ export class ListingsPage {
   categoryDialog: boolean = false;
   deleteItemDialog: boolean = false;
   deleteCategoryDialog: boolean = false;
-  
+  treatments: any[] = [];
+  id:string = '';
   activeIndex: number = 0;
   submitted: boolean = false;
   treatmentForm: FormGroup; // Reactive form for treatment
-  
-  constructor(private messageService: MessageService,private fb: FormBuilder,private http:HttpClient) {
+  categoryTreatment:any
+  constructor(private messageService: MessageService,private fb: FormBuilder,private http:HttpClient, private apiService: ApiService) {
     this.treatmentForm = this.fb.group({
       title: ['', [Validators.required]],
       price: [0, [Validators.required, Validators.min(1)]],
@@ -112,6 +113,8 @@ export class ListingsPage {
   
   ngOnInit() {
     this.loadData();
+    this.fetchAllTreatments();
+    // this.fetchCategories();
   }
   
   loadData() {
@@ -178,34 +181,69 @@ export class ListingsPage {
     ];
     
     // Mock data for categories
-    this.categories = [
-      {
-        "_id": "67e76ef476a4636407fb1306",
-        "title": "Body Massage",
-        "imageUrl": "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      },
-      {
-        "_id": "67e76ef476a4636407fb1302",
-        "title": "Facial",
-        "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      },
-      {
-        "_id": "67e76ef476a4636407fb1304",
-        "title": "Hair",
-        "imageUrl": "https://images.unsplash.com/photo-1470259078422-826894b933aa?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      }
-    ];
+    // this.categories = [
+    //   {
+    //     "_id": "67e76ef476a4636407fb1306",
+    //     "title": "Body Massage",
+    //     "imageUrl": "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   },
+    //   {
+    //     "_id": "67e76ef476a4636407fb1302",
+    //     "title": "Facial",
+    //     "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   },
+    //   {
+    //     "_id": "67e76ef476a4636407fb1304",
+    //     "title": "Hair",
+    //     "imageUrl": "https://images.unsplash.com/photo-1470259078422-826894b933aa?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   }
+    // ];
     
     // Associate items with their categories
-    this.categories.forEach(category => {
-      category.items = this.items.filter(item => item.categoryId === category._id);
-    });
+   
+  }
+
+  fetchCategories() {
+    this.apiService.getCategories().subscribe({
+      next: (response: any) => {
+        this.categories = response;
+        console.log('Categories:', this.categories);
+        this.categoryTreatment = this.treatments.filter((item:any) => item.type === "TREATMENT");
+console.log('categoryTreatment:', this.categoryTreatment);
+        // this.filterData();
+        // this.loading = false;
+      },
+      error: (error:any) => {  
+        console.error('Error fetching categories:', error);
+        // this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',     
+       })
+    }});
   }
   
-  openNew(type: string) {
-    if (type === 'package') {
+  fetchAllTreatments() {
+    this.apiService.getTreatments().subscribe({
+      next: (response: any) => {
+        this.treatments = response;
+        // this.filterData();
+        // this.loading = false;
+        this.fetchCategories()
+      },
+      error: (error) => {
+        console.error('Error fetching treatments:', error);
+      }
+    });
+  }
+  openNew(type: string, categoryId?: string) {
+    this.treatmentForm.reset();
+    this.submitted = false;
+    if (type === 'PACKAGE') {
+      this.treatmentForm.reset();
+      this.treatmentForm.patchValue({ type: 'PACKAGE' });
       this.selectedItem = {
-        _id: this.generateId(),
+        _id: '',
         title: '',
         price: 0,
         contentDescription: '',
@@ -215,9 +253,10 @@ export class ListingsPage {
       };
       this.submitted = false;
       this.itemDialog = true;
-    } else if (type === 'offer') {
+    } else if (type === 'OFFER') {
+      this.treatmentForm.patchValue({ type: 'OFFER' });
       this.selectedItem = {
-        _id: this.generateId(),
+        _id: '',
         title: '',
         price: 0,
         contentDescription: '',
@@ -225,54 +264,137 @@ export class ListingsPage {
         imageUrl: '',
         type: 'OFFER'
       };
-      this.submitted = false;
       this.itemDialog = true;
-    } else if (type === 'category') {
+    } else if (type === 'TREATMENT') {
+      this.treatmentForm.patchValue({ type: 'TREATMENT' });
+      this.selectedItem = {
+        _id: '',
+        title: '',
+        price: 0,
+        contentDescription: '',
+        contentHighlights: '',
+        imageUrl: '',
+        type: 'OFFER'
+      };
+      this.itemDialog = true;
+    } 
+    
+    else if (type === 'CATEGORY') {
+      // this.treatmentForm.patchValue({ type: 'TREATMENT' });
       this.selectedCategory = {
-        _id: this.generateId(),
+        _id: '',
         title: '',
         imageUrl: ''
       };
-      this.submitted = false;
       this.categoryDialog = true;
-    }
-      else if (type === 'treatment') {
-        this.treatmentForm.reset();
-        this.treatmentForm.patchValue({ type: 'TREATMENT' });
-        this.itemDialog = true;
-        this.submitted = false;
-      }
-
+    } else if(type === 'TREATMENT') {
+      this.treatmentForm.patchValue({
+        type: 'TREATMENT',
+        categoryId: categoryId || null, // Associate with the selected category
+      });
+      this.selectedItem = {
+        _id: '',
+        title: '',
+        price: 0,
+        contentDescription: '',
+        contentHighlights: '',
+        imageUrl: '',
+        type: 'TREATMENT'
+      };
+      this.itemDialog = true;
+    } 
   }
 
   saveTreatment() {
     this.submitted = true;
-
+  
+    // Check if the form is invalid
     if (this.treatmentForm.invalid) {
       return;
     }
-
+  
     const treatmentData = this.treatmentForm.value;
-
-    this.http.post('http://localhost:3000/api/treatments', treatmentData).subscribe(
-      (response: any) => {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Treatment Created', life: 3000 });
-        this.items.push(response);
-        this.itemDialog = false;
-        this.treatmentForm.reset();
-        this.submitted = false;
-      },
-      (error:any) => {
-        console.error('Error creating treatment:', error);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create treatment', life: 3000 });
-      }
-    );
+  
+    // Check if it's an update or create operation
+    if (this.selectedItem._id) {
+      // Update (PUT)
+      this.http.put(`http://localhost:3000/api/treatments/${this.selectedItem._id}`, treatmentData).subscribe(
+        (response: any) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Treatment Updated',
+            life: 3000,
+          });
+  
+          // Update the treatment in the local list
+          const index = this.treatments.findIndex((t) => t._id === this.id);
+          if (index !== -1) {
+            this.treatments[index] = response;
+          }
+  
+          this.itemDialog = false;
+          this.treatmentForm.reset();
+          this.submitted = false;
+          this.selectedItem = { _id: '', title: '', imageUrl: '' } as Item; // Reset the id
+          this.id=''
+        },
+        (error: any) => {
+          console.error('Error updating treatment:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update treatment',
+            life: 3000,
+          });
+        }
+      );
+    } else {
+      // Create (POST)
+      this.http.post('http://localhost:3000/api/treatments', treatmentData).subscribe(
+        (response: any) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Treatment Created',
+            life: 3000,
+          });
+  
+          // Add the new treatment to the local list
+          this.treatments.push(response);
+  
+          this.itemDialog = false;
+          this.treatmentForm.reset();
+          this.submitted = false;
+        },
+        (error: any) => {
+          console.error('Error creating treatment:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to create treatment',
+            life: 3000,
+          });
+        }
+      );
+    }
   }
 
   
-  editItem(item: Item) {
-    this.selectedItem = {...item};
-    this.itemDialog = true;
+  editItem(treatment: Item) {
+    this.selectedItem = { ...treatment }; // Clone the selected item
+    this.treatmentForm.patchValue({
+      title: treatment.title,
+      price: treatment.price,
+      contentDescription: treatment.contentDescription,
+      contentHighlights: treatment.contentHighlights,
+      imageUrl: treatment.imageUrl,
+      type: treatment.type,
+      categoryId: treatment.categoryId,
+    });
+    this.id=treatment._id;
+    this.itemDialog = true; // Open the dialog
+    this.submitted = false; // Reset the submitted flag
   }
   
   editCategory(category: Category) {
@@ -280,9 +402,11 @@ export class ListingsPage {
     this.categoryDialog = true;
   }
   
-  deleteItem(item: Item) {
+  deleteItem(treatment: Item) {
     this.deleteItemDialog = true;
-    this.selectedItem = {...item};
+    this.id = treatment._id;
+    console.log(treatment)
+    this.selectedItem = {...treatment};
   }
   
   deleteCategory(category: Category) {
@@ -291,7 +415,20 @@ export class ListingsPage {
   }
   
   confirmDeleteItem() {
-    this.items = this.items.filter(val => val._id !== this.selectedItem._id);
+    // this.items = this.items.filter(val => val._id !== this.selectedItem._id);
+    this.http.delete(`http://localhost:3000/api/treatments/${this.selectedItem._id}`).subscribe(
+      (response: any) => {  
+        console.log('Treatment deleted successfully:', response);
+        const index = this.treatments.findIndex((t) => t._id === this.id);
+        if (index !== -1) {
+          this.treatments[index] = response;
+        }
+
+       },(error:any) => {
+        console.error('Error deleting treatment:', error);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete treatment', life: 3000 });
+      }
+    );
     
     // Also remove from category items if applicable
     if (this.selectedItem.categoryId) {
@@ -307,10 +444,28 @@ export class ListingsPage {
   }
   
   confirmDeleteCategory() {
-    this.categories = this.categories.filter(val => val._id !== this.selectedCategory._id);
-    this.deleteCategoryDialog = false;
-    this.selectedCategory = {} as Category;
-    this.messageService.add({severity: 'success', summary: 'Success', detail: 'Category Deleted', life: 3000});
+    this.http.delete(`http://localhost:3000/api/categories/${this.selectedCategory._id}`).subscribe(
+      (response: any) => {
+        this.categories = this.categories.filter((category) => category._id !== this.selectedCategory._id); // Remove the category from the local list
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Category Deleted',
+          life: 3000,
+        });
+        this.deleteCategoryDialog = false;
+        this.selectedCategory = {} as Category;
+      },
+      (error: any) => {
+        console.error('Error deleting category:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to delete category',
+          life: 3000,
+        });
+      }
+    );
   }
   
   hideDialog() {
@@ -320,8 +475,7 @@ export class ListingsPage {
   }
   
   saveItem() {
-    this.submitted = true;
-    
+    this.submitted = true;  
     if (this.selectedItem.title.trim()) {
       if (this.selectedItem._id) {
         // Update existing item
@@ -346,7 +500,7 @@ export class ListingsPage {
         }
       } else {
         // Create new item
-        this.selectedItem._id = this.generateId();
+        // this.selectedItem._id = this.generateId();
         this.items.push(this.selectedItem);
         
         // Add to category items if applicable
@@ -374,26 +528,63 @@ export class ListingsPage {
   
   saveCategory() {
     this.submitted = true;
-    
-    if (this.selectedCategory.title.trim()) {
-      if (this.selectedCategory._id) {
-        // Update existing category
-        const index = this.findIndexById(this.selectedCategory._id, this.categories);
-        if (index !== -1) {
-          this.categories[index] = this.selectedCategory;
-          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Category Updated', life: 3000});
+  
+    // Check if the category title is valid
+    if (!this.selectedCategory.title.trim()) {
+      return;
+    }
+  
+    if (this.selectedCategory._id) {
+      // Update existing category (PUT)
+      this.http.put(`http://localhost:3000/api/categories/${this.selectedCategory._id}`, this.selectedCategory).subscribe(
+        (response: any) => {
+          const index = this.findIndexById(this.selectedCategory._id, this.categories);
+          if (index !== -1) {
+            this.categories[index] = response; // Update the category in the local list
+          }
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Category Updated',
+            life: 3000,
+          });
+          this.categoryDialog = false;
+          this.selectedCategory = {} as Category;
+        },
+        (error: any) => {
+          console.error('Error updating category:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update category',
+            life: 3000,
+          });
         }
-      } else {
-        // Create new category
-        this.selectedCategory._id = this.generateId();
-        this.selectedCategory.items = [];
-        this.categories.push(this.selectedCategory);
-        this.messageService.add({severity: 'success', summary: 'Success', detail: 'Category Created', life: 3000});
-      }
-      
-      this.categories = [...this.categories];
-      this.categoryDialog = false;
-      this.selectedCategory = {} as Category;
+      );
+    } else {
+      // Create new category (POST)
+      this.http.post('http://localhost:3000/api/categories', this.selectedCategory).subscribe(
+        (response: any) => {
+          this.categories.push(response); // Add the new category to the local list
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Category Created',
+            life: 3000,
+          });
+          this.categoryDialog = false;
+          this.selectedCategory = {} as Category;
+        },
+        (error: any) => {
+          console.error('Error creating category:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to create category',
+            life: 3000,
+          });
+        }
+      );
     }
   }
   
@@ -407,13 +598,15 @@ export class ListingsPage {
     }
     return index;
   }
-  
-  generateId(): string {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+  getCategoryTreatments(categoryId: string): any[] {
+    return this.categoryTreatment?.filter((treatment:any) => treatment.categoryId === categoryId) || [];
   }
+  
+
 
   getFilteredItems(type: string): Item[] {
-    return this.items.filter(item => item.type === type);
+    return this.treatments.filter(item => item.type === type);
   }
 
   getHighlightsArray(highlights: string): string[] {

@@ -1,28 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonCard, IonIcon, IonBackButton, IonBadge, IonButtons, IonToolbar, IonTitle, IonCardContent, IonLabel, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonRow, IonContent, IonHeader } from '@ionic/angular/standalone';
+import {  IonIcon, IonBackButton, IonBadge, IonButtons, IonToolbar, IonCol, IonGrid, IonRow, IonContent, IonHeader } from '@ionic/angular/standalone';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { addIcons } from 'ionicons';
 import { calendarOutline, refreshCircleOutline, closeCircleOutline } from 'ionicons/icons';
 import { AlertController, ToastController } from '@ionic/angular';
-
+import { Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api.service';
 @Component({
   selector: 'app-services',
   templateUrl: './services.page.html',
   styleUrls: ['./services.page.scss'],
   standalone: true,
-  imports: [IonCard, IonIcon, HttpClientModule, IonBadge, IonLabel, IonContent, IonCardContent, IonHeader, IonContent, IonToolbar, IonCardHeader, IonCardSubtitle, IonCardTitle, IonGrid, IonRow, IonCol, IonBackButton, IonButtons, IonToolbar, IonTitle, CommonModule, FormsModule],
+  providers: [ApiService],
+  imports: [ IonIcon, HttpClientModule, IonBadge, IonContent, IonHeader, IonContent, IonToolbar, IonGrid, IonRow, IonCol, IonBackButton, IonButtons, IonToolbar, CommonModule, FormsModule],
 })
 export class ServicesPage implements OnInit {
   historys: any[] = [];
-  user: any;
-  apiUrl: string = "http://localhost:3000/api";
-  
+  user: any;  
   constructor(
     private http: HttpClient,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private router: Router,
+    private apiService: ApiService
   ) {
     addIcons({
       'calendar-outline': calendarOutline,
@@ -41,8 +43,7 @@ export class ServicesPage implements OnInit {
   }
   
   fetchServicesHistory() {
-    const apiUrl = `${this.apiUrl}/bookings/user/${this.user._id}`;
-    this.http.get(apiUrl).subscribe(
+    this.apiService.getServicesHistory(this.user._id).subscribe(
       (response: any) => {
         this.historys = response;
         console.log('Services History:', response);
@@ -54,7 +55,7 @@ export class ServicesPage implements OnInit {
     );
   }
 
-  async rescheduleBooking(bookingId: string) {
+  async rescheduleBooking(bookingId: string,treatment:any) {
     const alert = await this.alertController.create({
       header: 'Reschedule Appointment',
       message: 'Are you sure you want to reschedule this appointment?',
@@ -69,8 +70,12 @@ export class ServicesPage implements OnInit {
             // Navigate to reschedule page or open reschedule modal
             console.log('Reschedule booking:', bookingId);
             this.showToast('Redirecting to reschedule page...');
-            // Add your navigation logic here
-          }
+            this.router.navigate(['/booking-details'], {
+              queryParams: {
+                contentType: treatment.contentType,
+                id: treatment._id,
+                imageUrl: treatment.imageUrl,
+                phone: this.user.phone}});          }
         }
       ]
     });
@@ -90,8 +95,7 @@ export class ServicesPage implements OnInit {
         {
           text: 'Yes, Cancel',
           handler: () => {
-            const cancelUrl = `${this.apiUrl}/bookings/${bookingId}/cancel`;
-            this.http.put(cancelUrl, {}).subscribe(
+            this.apiService.cancelBooking(bookingId).subscribe(
               (response: any) => {
                 console.log('Booking cancelled:', response);
                 this.showToast('Your appointment has been cancelled successfully.');
@@ -106,7 +110,7 @@ export class ServicesPage implements OnInit {
         }
       ]
     });
-
+  
     await alert.present();
   }
 

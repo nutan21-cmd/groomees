@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+// import { IonicModule } from '@ionic/angular';
+import { IonTabs,IonTabButton,IonLabel,IonTabBar ,IonIcon} from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
 import { homeOutline, listOutline, settingsOutline } from 'ionicons/icons';
 @Component({
@@ -9,7 +11,13 @@ import { homeOutline, listOutline, settingsOutline } from 'ionicons/icons';
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, IonicModule],
+  imports: [CommonModule, RouterModule,
+    IonTabButton,
+    IonTabs,
+    IonLabel,
+    IonTabBar,
+    IonIcon
+  ],
 
 })
 export class TabsComponent {
