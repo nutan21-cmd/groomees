@@ -9,7 +9,7 @@
       <p-tabPanel header="Packages">
         <p-toolbar>
           <div class="p-toolbar-group-start">
-            <p-button label="New Package" icon="pi pi-plus" (onClick)="openNew('PACKAGE')"></p-button>
+            <p-button label="New Package" icon="pi pi-plus" color="primary" (onClick)="openNew('PACKAGE')"></p-button>
           </div>
         </p-toolbar>
         
@@ -44,10 +44,8 @@
           </ng-template> -->
           <ng-template pTemplate="header">
             <tr>
-              <th style="width: 5%">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-                <th pSortableColumn="title" style="width:33%">
+             
+                <th pSortableColumn="title" style="width:20%">
                     Title <p-sortIcon field="title" />
                 </th>
                 <th pSortableColumn="price" style="width:20%">
@@ -66,9 +64,7 @@
         </ng-template>
           <ng-template pTemplate="body" let-treatments>
             <tr>
-              <td>
-                <p-tableCheckbox [value]="treatments"></p-tableCheckbox>
-              </td>
+             
               <td>{{treatments.title}}</td>
               <td>{{treatments.price | currency:'USD'}}</td>
               <td >
@@ -78,10 +74,14 @@
                 <img [src]="treatments.imageUrl" [alt]="treatments.title" class="shadow-2" />
               </td>
               <td>
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                        (click)="editItem(treatments)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                        (click)="deleteItem(treatments)"></button>
+                <div class="action-buttons">
+                  <div class="action-button edit-button" (click)="editItem(treatments)">
+                    <ion-icon size="large" color="primary" name="create-outline"></ion-icon>
+                  </div>
+                  <div class="action-button delete-button" (click)="deleteItem(treatments)">
+                    <ion-icon size="large" color="danger" name="trash-outline"></ion-icon>
+                  </div>
+                </div>
               </td>
             </tr>
           </ng-template>
@@ -118,10 +118,7 @@
           </ng-template>
           <ng-template pTemplate="header">
             <tr>
-              <th style="width: 5%">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-                <th pSortableColumn="title" style="width:33%">
+                <th pSortableColumn="title" style="width:20%">
                     Title <p-sortIcon field="title" />
                 </th>
                 <th pSortableColumn="price" style="width:20%">
@@ -140,9 +137,6 @@
         </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr>
-              <td>
-                <p-tableCheckbox [value]="item"></p-tableCheckbox>
-              </td>
               <td>{{item.title}}</td>
               <td>{{item.price | currency:'USD'}}</td>
               <td>
@@ -152,10 +146,14 @@
                 <img [src]="item.imageUrl" [alt]="item.title" width="100" class="shadow-2" />
               </td>
               <td>
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                        (click)="editItem(item)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                        (click)="deleteItem(item)"></button>
+                <div class="action-buttons">
+                  <div class="action-button edit-button" (click)="editItem(item)">
+                    <ion-icon size="large" color="primary" name="create-outline"></ion-icon>
+                  </div>
+                  <div class="action-button delete-button" (click)="deleteItem(item)">
+                    <ion-icon size="large" color="danger" name="trash-outline"></ion-icon>
+                  </div>
+                </div>
               </td>
             </tr>
           </ng-template>
@@ -177,25 +175,30 @@
         <p-accordion>
           <p-accordionTab *ngFor="let category of categories" [header]="category.title">
             <div class="flex justify-content-between align-items-center">
-              <div>
-                <h3>{{ category.title }}</h3>
+              <div class="category-actions-container">
+                <div class="image-container">
+                  <img [src]="category.imageUrl" [alt]="category.title" width="100" class="shadow-4 image-ratio" />
+                </div>
+                
+            
+
+                <div class="action-buttons button-group">
+                  <div class="action-button edit-button" (click)="editCategory(category)">
+                    <ion-icon size="large" color="primary" name="create-outline"></ion-icon>
+                  </div>
+                  <div class="action-button delete-button" (click)="deleteCategory(category)">
+                    <ion-icon size="large" color="danger" name="trash-outline"></ion-icon>
+                  </div>
+                  <div class="action-button add-button" (click)="openNew('TREATMENT', category._id)">
+                    <ion-icon size="large" name="add-circle-outline"></ion-icon>
+                  </div>
+                </div>
               </div>
-              <div>
-                <!-- Edit and Delete Buttons in Accordion Header -->
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                        (click)="editCategory(category)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                        (click)="deleteCategory(category)"></button>
-                <!-- Add New Treatment Button -->
-                <button pButton pRipple label="Add Treatment" icon="pi pi-plus" class="p-button-text"
-                        (click)="openNew('TREATMENT', category._id)"></button>
-              </div>
+              
             </div>
       
             <div class="flex flex-column md:flex-row mb-4">
-              <div class="w-full md:w-4 flex align-items-center justify-content-center">
-                <img [src]="category.imageUrl" [alt]="category.title" width="200" class="shadow-4" />
-              </div>
+             
               <div class="w-full md:w-8 ml-0 md:ml-4 pt-4 md:pt-0">
                 <p-table 
                   [value]="getCategoryTreatments(category._id)" 
@@ -225,11 +228,16 @@
                       <td>
                         <img [src]="item.imageUrl" [alt]="item.title" width="70" class="shadow-2" />
                       </td>
+                   
                       <td>
-                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                                (click)="editItem(item)"></button>
-                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                (click)="deleteItem(item)"></button>
+                        <div class="action-buttons">
+                          <div class="action-button edit-button" (click)="editItem(item)">
+                            <ion-icon size="large" color="primary" name="create-outline"></ion-icon>
+                          </div>
+                          <div class="action-button delete-button" (click)="deleteItem(item)">
+                            <ion-icon size="large" color="danger" name="trash-outline"></ion-icon>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   </ng-template>
@@ -295,26 +303,28 @@
   <p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}" header="Category Details" [modal]="true" 
             styleClass="p-fluid">
     <ng-template pTemplate="content">
-      <div class="field">
-        <label for="categoryTitle">Title</label>
-        <input type="text" pInputText id="categoryTitle" [(ngModel)]="selectedCategory.title" required autofocus 
-               [ngClass]="{'ng-invalid ng-dirty': submitted && !selectedCategory.title}"/>
-        <small class="ng-dirty ng-invalid" *ngIf="submitted && !selectedCategory.title">Title is required.</small>
-      </div>
-      
-      <div class="field">
-        <label for="categoryImageUrl">Image URL</label>
-        <input type="text" pInputText id="categoryImageUrl" [(ngModel)]="selectedCategory.imageUrl" required 
-               [ngClass]="{'ng-invalid ng-dirty': submitted && !selectedCategory.imageUrl}"/>
-        <small class="ng-dirty ng-invalid" *ngIf="submitted && !selectedCategory.imageUrl">Image URL is required.</small>
-      </div>
-      
-      <div class="field" *ngIf="selectedCategory.imageUrl">
-        <label>Image Preview</label>
-        <div class="flex justify-content-center">
-          <img [src]="selectedCategory.imageUrl" [alt]="selectedCategory.title" width="200" class="shadow-4" />
+      <div class="category-dialog">
+        <div class="field category-dialog">
+          <div class="field" *ngIf="selectedCategory.imageUrl">
+            <label>Image Preview</label>
+            <div class="flex justify-content-center">
+              <img [src]="selectedCategory.imageUrl" [alt]="selectedCategory.title" class="shadow-4 image-ratio" />
+            </div>
+          </div>
+          <label for="categoryTitle">Title</label>
+          <input type="text" pInputText id="categoryTitle" style="width: 100%;"[(ngModel)]="selectedCategory.title" required autofocus 
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !selectedCategory.title}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !selectedCategory.title">Title is required.</small>
+        </div>
+        
+        <div class="field">
+          <label for="categoryImageUrl">Image URL</label>
+          <input type="text" style="width: 100%;" pInputText id="categoryImageUrl" [(ngModel)]="selectedCategory.imageUrl" required 
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !selectedCategory.imageUrl}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !selectedCategory.imageUrl">Image URL is required.</small>
         </div>
       </div>
+   
     </ng-template>
     
     <ng-template pTemplate="footer">
@@ -335,7 +345,7 @@
     </ng-template>
   </p-dialog>
   
-  <p-dialog [(visible)]="deleteCategoryDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}"> -->
+  <p-dialog [(visible)]="deleteCategoryDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
       <span>Are you sure you want to delete <b>{{selectedCategory.title}}</b>?</span>
@@ -350,12 +360,38 @@
   <p-dialog [(visible)]="itemDialog" [style]="{width: '650px'}" header="Treatment Details" [modal]="true">
     <ng-template #content>
       <form [formGroup]="treatmentForm" (ngSubmit)="saveTreatment()">
-        <div class="flex flex-col gap-6">
-          <img
-          [src]="treatmentForm.get('imageUrl')?.value"
-          [alt]=" treatmentForm.get('imageUrl')?.value"
-          class="block m-auto pb-4"
-          *ngIf="treatmentForm.get('imageUrl')?.value"/>
+        <div class="flex flex-col gap-6 treatment-dialog">
+          <div class="card-section" *ngIf="treatmentForm.get('imageUrl')?.value"> 
+            <img
+            [src]="treatmentForm.get('imageUrl')?.value"
+            [alt]=" treatmentForm.get('imageUrl')?.value"
+            class="block m-auto pb-4 image-ratio"
+            /> 
+            <!-- <div>
+              <label for="imageUpload" class="block font-bold mb-3">Upload Image</label>
+              <p-fileUpload
+                name="image"
+                mode="advanced"
+                accept="image/*"
+                maxFileSize="1000000"
+                customUpload="true"
+                [auto]="true"
+                [showUploadButton]="false"
+                [showCancelButton]="false"
+                dragDrop="true"
+                chooseLabel="Drag and drop or click to upload"
+              ></p-fileUpload>
+              <div *ngIf="treatmentForm.get('imageUrl')?.value" class="mt-3">
+                <label>Image Preview</label>
+                <img
+                  [src]="treatmentForm.get('imageUrl')?.value"
+                  [alt]="treatmentForm.get('title')?.value"
+                  class="block m-auto pb-4 image-ratio"
+                />
+              </div>
+            </div> -->
+          </div>
+         
           <div>
             <label for="name" class="block font-bold mb-3">Title</label>
             <input
@@ -382,7 +418,7 @@
               formControlName="contentDescription"
               required
               rows="4"
-              cols="45"
+              style="width: 100%;"              
               fluid
             ></textarea>
             <small
@@ -401,7 +437,7 @@
               formControlName="contentHighlights"
               required
               rows="5"
-              cols="45"
+              style="width: 100%;"
               fluid
             ></textarea>
             <small
@@ -453,6 +489,7 @@
                 formControlName="type"
                 required
                 fluid
+                readonly
               />
               <small
                 *ngIf="submitted && treatmentForm.controls['type'].invalid"

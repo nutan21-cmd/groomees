@@ -17,7 +17,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ShimmerComponent } from '../../shimmer/shimmer.component';
 import { SkeletonModule } from 'primeng/skeleton';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -45,7 +44,6 @@ export class HomePage implements OnInit {
     register();
     this.fetchCategories();
     this.fetchAllTreatments();
-    // this.fetchOffers();
   }
   fetchCategories() {
     this.loading = true;

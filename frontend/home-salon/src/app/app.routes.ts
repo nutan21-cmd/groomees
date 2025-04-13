@@ -23,6 +23,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/setting/setting.page').then((m) => m.SettingPage),
       },
       {
+        path: 'listings',
+        loadComponent: () => import('./pages/listings/listings.page').then( m => m.ListingsPage)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./pages/users/users.page').then( m => m.UsersPage)
+      },
+      {
         path: '',
         redirectTo: 'home', // Redirect to 'home' when navigating to '/tabs'
         pathMatch: 'full',
@@ -52,13 +60,5 @@ export const routes: Routes = [
   {
     path: 'registration',
     loadComponent: () => import('./pages/registration/registration.page').then( m => m.RegistrationPage)
-  },
-  {
-    path: 'listings',
-    loadComponent: () => import('./pages/listings/listings.page').then( m => m.ListingsPage)
-  },
-  {
-    path: 'users',
-    loadComponent: () => import('./pages/users/users.page').then( m => m.UsersPage)
-  },
+  }
 ];

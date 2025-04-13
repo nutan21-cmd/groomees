@@ -34,7 +34,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+// @import '@ionic/angular/css/palettes/dark.system.css';
 
 :root {
   --primary-color: #ff6b6b;
@@ -43,17 +43,54 @@
   --text-color: #333;
   --card-background: white;
   --text-color: #333;
+  --ion-color-scheme: light;
+  
+}
+
+// Colors
+$primary-color: #3880ff; // Base color for Sass functions
+$primary-color-rgb: '56, 128, 255'; // RGB values for rgba functions
+$white: #ffffff;
+$black: #000000;
+$gray-light: #f5f5f5;
+$gray-medium: #e0e0e0;
+
+// Shadows
+$shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.12);
+$shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+// Spacing and Borders
+$spacing-unit: 0.5rem;
+$border-radius: 8px;
+
+// Transitions
+$transition: all 0.25s ease;
+html {
+  color-scheme: light;
+}
+
+@mixin card-style {
+  border-radius: $border-radius;
+  box-shadow: $shadow-light;
+  transition: $transition;
+
+  &:hover {
+    box-shadow: $shadow-medium;
+  }
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-ion-content {
-  margin-top: 60px !important; /* Add margin equal to the header height */
-  --background: var(--background-color);
 
-}
+
+// ion-content {
+//   margin-top: 60px !important; /* Add margin equal to the header height */
+//   --background: var(--background-color);
+
+// }
 
 ion-header ion-toolbar {
   --background: var(--background-color) !important; /* Force the background color */
@@ -62,7 +99,6 @@ ion-header ion-toolbar {
 ion-header img.header-logo {
   width: 100%; /* Full width */
   height: 60px; /* Maintain aspect ratio */
-
 }
 
 .card-section {
@@ -121,6 +157,413 @@ ion-alert.professional-alert .alert-title.sc-ion-alert-ios {
   
 }
 
+
+
+// Button Styling
+.p-button {
+  background-color: var(--ion-color-primary);
+  border: 1px solid var(--ion-color-primary);
+  color: $white;
+  border-radius: $border-radius;
+  transition: $transition;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+
+  &:hover,
+  &:focus {
+    background-color: var(--ion-color-primary-shade);
+    border-color: var(--ion-color-primary-shade);
+    box-shadow: $shadow-hover;
+    transform: translateY(-2px);
+  }
+
+  &.p-button-rounded {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  &.p-button-text {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--ion-color-primary);
+
+    &:hover {
+      background-color: rgba($primary-color, 0.08);
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+// Input Styling
+.p-inputtext {
+  color: $black;
+  border: 1px solid $gray-medium;
+  border-radius: $border-radius;
+  padding: 0.65rem;
+  width: 100%;
+  transition: $transition;
+
+  &:focus {
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 0 0 2px rgba($primary-color, 0.15);
+  }
+}
+
+// :host ::ng-deep {
+//   .p-accordionheader,
+//   .p-tabpanels,
+//   .p-tablist-tab-list,
+//   .p-accordioncontent-content{
+//     background-color: $white;
+//   }
+//   .p-accordioncontent-content{
+//     color:$black
+//   }
+// }
+
+// Dialog Styling
+.p-dialog {
+
+  border-radius: $border-radius;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+
+  .p-dialog-header {
+ 
+    padding: 1.25rem;
+    border-bottom: 1px solid $gray-medium;
+
+    .p-dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+  }
+
+  .p-dialog-content {
+    padding: 1.25rem;
+  }
+
+  .p-dialog-footer {
+    background-color: $gray-light;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid $gray-medium;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  
+}
+
+
+
+:host ::ng-deep {
+  // Button styling
+ 
+  
+  // Input styling
+  .p-inputtext {
+    border: 1px solid $gray-medium;
+    border-radius: $border-radius;
+    padding: 0.65rem;
+    width: 100%;
+    transition: $transition;
+    
+    &:focus {
+      border-color: var(--ion-color-primary);
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.15);
+    }
+  }
+  
+  // Dialog styling
+
+  
+  // TabView styling - enhanced
+  .p-tabview {
+    @include card-style;
+    overflow: hidden;
+    
+    .p-tabview-nav {
+      border-bottom: 1px solid $gray-medium;
+      padding: 0;
+      
+      li {
+        margin-right: 4px;
+        
+        .p-tabview-nav-link {
+          color: $black;
+          background-color: transparent;
+          border: none;
+          border-bottom: 3px solid transparent;
+          border-radius: $border-radius $border-radius 0 0;
+          padding: 1rem 1.5rem;
+          font-weight: 500;
+          transition: $transition;
+          
+          &:hover {
+            background-color: rgba($primary-color, 0.05);
+            color: var(--ion-color-primary);
+          }
+          
+          &.p-highlight {
+            color: var(--ion-color-primary);
+            border-bottom-color: var(--ion-color-primary);
+          }
+        }
+      }
+    }
+    
+    .p-tabview-panels {
+      padding: 1.5rem;
+    }
+  }
+  
+  // DataTable styling - enhanced
+  .p-datatable {
+    @include card-style;
+    overflow: hidden;
+    
+    .p-datatable-header {
+      padding: 1.25rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-bottom: 1px solid $gray-medium;
+    }
+    
+    .p-datatable-thead > tr > th {
+      background-color: $gray-light;
+      color: $black;
+      padding: 1rem;
+      font-weight: 600;
+      border: none;
+      border-bottom: 2px solid $gray-medium;
+      transition: $transition;
+      
+      &:hover {
+        background-color: darken($gray-light, 5%);
+      }
+      
+      &.p-highlight {
+        background-color: rgba($primary-color, 0.08);
+        color: var(--ion-color-primary);
+      }
+    }
+    
+    .p-datatable-tbody > tr {
+      transition: $transition;
+      
+      &:nth-child(even) {
+        background-color: rgba($gray-light, 0.5);
+      }
+      
+      &:hover {
+        background-color: rgba($primary-color, 0.05);
+      }
+      
+      > td {
+        padding: 0.85rem 1rem;
+        border: none;
+        border-bottom: 1px solid $gray-medium;
+        color: $black;
+      }
+    }
+    
+    .p-paginator {
+      padding: 0.75rem;
+      border-top: 1px solid $gray-medium;
+      
+      .p-paginator-element {
+        border-radius: $border-radius;
+        
+        &.p-highlight {
+          background-color: var(--ion-color-primary);
+          color: $white;
+        }
+      }
+    }
+  }
+  
+  // Accordion styling
+  .p-accordion {
+    .p-accordion-header {
+      
+      a {
+        padding: 1rem;
+        font-weight: 600;
+        color: $black;
+        border-radius: $border-radius;
+        transition: $transition;
+        
+        &:hover {
+          background-color: $gray-light;
+        }
+      }
+    }
+    
+    .p-accordion-content {
+      padding: 1.25rem;
+      border: 1px solid $gray-medium;
+      border-top: none;
+      border-radius: 0 0 $border-radius $border-radius;
+    }
+    
+    .p-accordionpanel {
+      margin-bottom: 0.75rem;
+      
+      &:not(.p-disabled).p-accordionpanel-active > .p-accordionheader {
+        color: var(--ion-color-primary);
+        
+        a {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+    }
+  }
+  
+  // Toolbar styling
+  .p-toolbar {
+    padding: 1rem;
+    border-radius: $border-radius;
+    margin-bottom: 1rem;
+    box-shadow: $shadow-light;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  // Tab color specifics
+  .p-tab:not(.p-tab-active):not(.p-disabled):hover {
+    color: var(--ion-color-primary);
+  }
+  
+  .p-tab-active {
+    color: var(--ion-color-primary);
+  }
+}
+
+
+// Action buttons in table cells
+:host ::ng-deep  .action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+  
+  .action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    
+    &:hover {
+      box-shadow: $shadow-medium;
+      transform: translateY(-2px);
+    }
+    
+    &.edit-button:hover {
+      background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+    }
+    
+    &.delete-button:hover {
+      background-color: rgba(var(--ion-color-danger-rgb), 0.1);
+    }
+    &.add-button:hover {
+      background-color: rgba(var(--ion-color-white-rgb), 0.1);
+    }
+    
+    ion-icon {
+      font-size: 1.25rem;
+      transition: all 0.2s ease;
+    }
+  }
+}
+
+// Dialog styles
+.dialogClass {
+  @include card-style;
+  padding: 1.25rem;
+  
+  label {
+    display: block;
+    margin: 1rem 0 0.5rem;
+    font-weight: 600;
+    color: $black;
+    font-size: 0.95rem;
+  }
+  
+  .image-ratio {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 250px;
+    border-radius: $border-radius;
+    border: 1px solid $gray-medium;
+  }
+}
+
+textarea, input, p-inputnumber {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+  background-color: #fff;
+  color: #333;
+  
+  // &:focus {
+  //   outline: none;
+  //   border-color: #2196F3;
+  //   box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.25);
+  // }
+  
+  &.ng-invalid.ng-touched, 
+  &.ng-invalid.ng-dirty {
+    border-color: #f44336;
+    
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.25);
+    }
+  }
+  
+  &::placeholder {
+    color: #aab5bd;
+  }
+  
+  &:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.p-error {
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.block {
+  display: block;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
 
 
 

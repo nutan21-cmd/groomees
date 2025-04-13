@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { IonTabs,IonTabButton,IonLabel,IonTabBar ,IonIcon} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { homeOutline, listOutline, settingsOutline } from 'ionicons/icons';
+import { homeOutline, laptopOutline, listOutline, peopleOutline, settingsOutline } from 'ionicons/icons';
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
@@ -21,15 +21,27 @@ import { homeOutline, listOutline, settingsOutline } from 'ionicons/icons';
 
 })
 export class TabsComponent {
-
+  userData:any
   constructor() { 
     addIcons({
       'home-outline': homeOutline,
       'list-outline': listOutline,
       'settings-outline': settingsOutline,
+      'laptop-outline': laptopOutline,
+      'people-outline':peopleOutline
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('TabsComponent ngOnInit called');
+    const user = localStorage.getItem('user');
+    const storedUserData = localStorage.getItem('user');
+    if (storedUserData) {
+      this.userData = JSON.parse(storedUserData);
+      console.log('User Data:', this.userData);
+    } else {
+      this.userData = { TYPE: 'User' }; // Default for testing
+      console.log('Default User Data:', this.userData);
+    }}
 
 }

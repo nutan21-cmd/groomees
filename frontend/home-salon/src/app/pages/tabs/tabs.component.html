@@ -4,9 +4,17 @@
       <ion-icon name="home-outline"></ion-icon>
       <ion-label>Home</ion-label>
     </ion-tab-button>
-    <ion-tab-button tab="services" routerLink="/tabs/services">
+    <ion-tab-button  tab="services" routerLink="/tabs/services">
       <ion-icon name="list-outline"></ion-icon>
       <ion-label>Bookings</ion-label>
+    </ion-tab-button> 
+    <ion-tab-button *ngIf="userData.TYPE === 'Admin'" tab="listings" routerLink="/tabs/listings">
+      <ion-icon name="laptop-outline"></ion-icon>      
+      <ion-label>Admin Dashboard</ion-label>
+    </ion-tab-button>
+    <ion-tab-button *ngIf="userData.TYPE === 'Admin'" tab="users" routerLink="/tabs/users">
+      <ion-icon name="people-outline"></ion-icon>      
+      <ion-label>All Users</ion-label>
     </ion-tab-button>
     <ion-tab-button tab="setting" routerLink="/tabs/setting">
       <ion-icon name="settings-outline"></ion-icon>

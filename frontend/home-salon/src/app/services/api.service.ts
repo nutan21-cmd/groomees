@@ -54,4 +54,63 @@ export class ApiService {
     const cancelUrl = `${this.apiUrl}/bookings/${bookingId}/cancel`;
     return this.http.put(cancelUrl, {});
   }
+
+  createCategory(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/categories`, payload);
+  }
+
+  updateCategory(id: string, payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/categories/${id}`, payload);
+  }
+
+  deleteCategory(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/categories/${id}`);
+  }
+
+  // Treatments APIs
+
+
+  createTreatment(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/treatments`, payload);
+  }
+
+  updateTreatment(id: string, payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/treatments/${id}`, payload);
+  }
+
+  deleteTreatment(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/treatments/${id}`);
+  }
+
+  getTreatmentsByCategory(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/categories/${id}/treatments`);
+  }
+
+  getAllUsersBooking(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/bookings/all-users-with-bookings`)
+  }
+
+  updateUser(userId: string, updatedData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/bookings/user/${userId}`, updatedData);
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/bookings/user/${userId}`);
+  }
+
+  updateBookings(bookingId: string, updatedData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/bookings/${bookingId}`, updatedData);
+  }
+
+  deleteBookings(bookingId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/bookings/${bookingId}`);
+  }
+
+  resheduleBookings(bookingId: string, updatedData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/bookings/reshedule/${bookingId}`, updatedData);
+  }
+
+  getBookingDetails(bookingId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/bookings/${bookingId}`);
+  }
 }

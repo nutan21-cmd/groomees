@@ -1,16 +1,36 @@
 
 <ion-header [translucent]="true" color="text-color">
   <ion-toolbar>
-    <app-shimmer *ngIf="loading" type="card"></app-shimmer>
-    <img *ngIf="!loading" src="assets/images/GM2.png" alt="Logo" class="header-logo">
+    <!-- <app-shimmer *ngIf="loading" type="card"></app-shimmer> -->
+    <img  src="assets/images/GM2.png" alt="Logo" class="header-logo">
   </ion-toolbar>
 </ion-header> 
-      <ion-content class="ion-padding" *ngIf="!loading && contentTypeData">
-        <div class="card-section">
+<!-- <div class="spinner-container" *ngIf="loading">
+  <p-progressSpinner strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+</div> -->
+<ion-content class="ion-padding" >
+  <div *ngIf="loading" class="card-section">
+    <ion-label class="text-color">Offers</ion-label>
+    <app-shimmer type="card"></app-shimmer>
+  </div>
+
+  <!-- Shimmer for the Categories section -->
+  <div *ngIf="loading" class="card-section">
+    <ion-label class="text-color">Categories</ion-label>
+      <app-shimmer type="card" ></app-shimmer>
+  </div>
+
+  <!-- Shimmer for the Packages section -->
+  <div *ngIf="loading" class="card-section">
+    <ion-label class="text-color">Packages</ion-label>
+    <div class="package-grid">
+      <app-shimmer type="card" ></app-shimmer>
+    </div>
+  </div>
+      <div *ngIf="!loading && contentTypeData"> 
+  <div class="card-section">
           <ion-label class="text-color">Offers</ion-label>
-          <app-shimmer *ngIf="loading" type="card"></app-shimmer>
           <swiper-container
-            *ngIf="!loading"
             class="mySwiper banner-image"
             pagination="true"
             pagination-clickable="true"
@@ -33,8 +53,7 @@
 
         <div class="card-section">
           <ion-label class="text-color">Categories</ion-label>
-          <app-shimmer *ngIf="loading" type="card"></app-shimmer>
-          <div class="services-grid" *ngIf="!loading">
+          <div class="services-grid">
             <div
               class="service-item"
               *ngFor="let category of categories"
@@ -53,9 +72,8 @@
   <!-- packages -->
   <div class="card-section">
     <ion-label class="text-color">Packages</ion-label>
-    <app-shimmer *ngIf="loading" type="card"></app-shimmer>
 
-    <div class="package-grid" *ngIf="!loading">
+    <div class="package-grid">
       <div
         class="service-header"
         *ngFor="let package of contentTypeData.PACKAGE"
@@ -72,6 +90,7 @@
       </div>
     </div>
   </div>
+</div> 
 
 </ion-content>
 

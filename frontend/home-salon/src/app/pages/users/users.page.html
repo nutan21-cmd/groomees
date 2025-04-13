@@ -1,13 +1,238 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" color="text-color">
   <ion-toolbar>
-    <ion-title>users</ion-title>
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
   </ion-toolbar>
-</ion-header>
+</ion-header> 
+<ion-content class="ion-padding">
+  <div class="card">
+    <p-toast />
+    <p-table [value]="users" dataKey="_id" [tableStyle]="{ 'min-width': '60rem' }" [loading]="loading" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+        <!-- <ng-template #caption>
+            <div class="flex flex-wrap justify-end gap-2">
+                <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
+                <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+            </div>
+        </ng-template> -->
+        <ng-template #header>
+            <tr>
+                <th style="width: 5rem"></th>
+                <th pSortableColumn="name">Name</th>
+                <th>Email</th>
+                <th pSortableColumn="price">Phone <p-sortIcon field="phone" /></th>
+                <th pSortableColumn="category">Address</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-user let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button type="button" pRipple [pRowToggler]="user" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                </td>
+                <td>{{ user.firstName }} {{ user.lastName }}</td>
+                <td>{{user.email}}</td>
+                <td>{{ user.phone }}</td>
+                <td>
+                    <div>{{ user?.address?.flat }}</div>
+                    <div>{{ user?.address?.area }}</div>
+                    <div>{{ user?.address?.landmark }}</div>
+                    <div>{{ user?.address?.city }}</div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">users</ion-title>
-    </ion-toolbar>
-  </ion-header>
+                </td>
+                <td>
+                    <!-- <p-button type="button" icon="pi pi-pencil" (click)="editUser(user)" class="p-button-rounded p-button-text" />
+                    <p-button type="button" icon="pi pi-trash" (click)="deleteUser(user)" class="p-button-rounded p-button-text" /> -->
+
+                    <div class="action-buttons">
+                        <div class="action-button edit-button" (click)="editUser(user)">
+                          <ion-icon size="large" color="primary" name="create-outline"></ion-icon>
+                        </div>
+                        <div class="action-button delete-button" (click)="deleteUser(user)" >
+                          <ion-icon size="large" color="danger" name="trash-outline"></ion-icon>
+                        </div>
+                      </div>
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-user>
+            <tr>
+                <td colspan="7">
+                    <div class="p-4">
+                        <h5>Bookings for {{ user.firstName }} {{user.lastName}}</h5>
+                        <p-table [value]="user.bookings" dataKey="_id">
+                            <ng-template #header>
+                                <tr>
+                                    <th>Title <p-sortIcon field="title" /></th>
+                                    <th>Price <p-sortIcon field="price" /></th>
+                                    <th>Date <p-sortIcon field="date" /></th>
+                                    <th>Time <p-sortIcon field="time" /></th>
+                                    <th>Status <p-sortIcon field="status" /></th>
+                                    <th style="width: 4rem"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-booking>
+                                <tr>
+                                    <td>{{ booking?.treatmentDetails?.title }}</td>
+                                    <td>{{ booking?.treatmentDetails?.price }}</td>
+                                    <td>{{ booking.selectedDate }}</td>
+                                    <td>{{ booking.selectedSlot }}</td>
+                                    <td>
+                                        <p-tag [value]="booking.status" [severity]="getStatusSeverity(booking.status)" />
+                                    </td>
+                                    <td>
+
+                                        <div class="action-buttons">
+                                            <div class="action-button edit-button" (click)="editBooking(user,booking)">
+                                              <ion-icon size="large" color="primary" name="create-outline"></ion-icon>
+                                            </div>
+                                            <div class="action-button delete-button" (click)="deleteBooking(user,booking)">
+                                              <ion-icon size="large" color="danger" name="trash-outline"></ion-icon>
+                                            </div>
+                                          </div>
+                                        
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #emptymessage>
+                                <tr>
+                                    <td colspan="6">There are no booking for this product yet.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
 </ion-content>
+
+
+<p-dialog [(visible)]="editUserDialog" header="Edit User" [modal]="true" styleClass="p-fluid">
+    <div *ngIf="selectedUser" class="dialogClass">
+  
+      <!-- Basic Info -->
+      <div class="field">
+        <label for="firstName">First Name</label>
+        <input id="firstName" type="text" pInputText [(ngModel)]="selectedUser.firstName" />
+      </div>
+  
+      <div class="field">
+        <label for="lastName">Last Name</label>
+        <input id="lastName" type="text" pInputText [(ngModel)]="selectedUser.lastName" />
+      </div>
+  
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" pInputText [(ngModel)]="selectedUser.email" />
+      </div>
+  
+      <div class="field">
+        <label for="phone">Phone</label>
+        <input id="phone" type="text" pInputText [(ngModel)]="selectedUser.phone" />
+      </div>
+  
+      <!-- Address Info -->
+      <div class="field">
+        <label for="flat">Flat</label>
+        <input id="flat" type="text" pInputText [(ngModel)]="selectedUser.address.flat" />
+      </div>
+  
+      <div class="field">
+        <label for="area">Area</label>
+        <input id="area" type="text" pInputText [(ngModel)]="selectedUser.address.area" />
+      </div>
+  
+      <div class="field">
+        <label for="landmark">Landmark</label>
+        <input id="landmark" type="text" pInputText [(ngModel)]="selectedUser.address.landmark" />
+      </div>
+  
+      <div class="field">
+        <label for="city">City</label>
+        <input id="city" type="text" pInputText [(ngModel)]="selectedUser.address.city" />
+      </div>
+  
+      <div class="field">
+        <label for="pincode">Pincode</label>
+        <input id="pincode" type="text" pInputText [(ngModel)]="selectedUser.address.pincode" />
+      </div>
+  
+    </div>
+  
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="editUserDialog = false"></button>
+      <button pButton label="Save" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+    </ng-template>
+  </p-dialog>
+  
+  <p-dialog [(visible)]="deleteUserDialog" header="Confirm" [modal]="true" [style]="{width: '450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span>Are you sure you want to delete <b>{{selectedUser?.firstName}} {{selectedUser?.lastName}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton label="No" icon="pi pi-times" class="p-button-text" (click)="deleteUserDialog = false"></button>
+      <button pButton label="Yes" icon="pi pi-check" class="p-button-text" (click)="confirmDeleteUser()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog [(visible)]="editBookingDialog" header="Edit Booking" [modal]="true" [style]="{width: '450px'}">
+    <div *ngIf="selectedBooking" class="dialogClass">
+    <!-- <div class="field">
+      <label for="title">Title</label>
+      <input id="title" type="text" pInputText [(ngModel)]="selectedBooking.title" />
+    </div>
+    <div class="field">
+      <label for="price">Price</label>
+      <input id="price" type="number" pInputText [(ngModel)]="selectedBooking.price" />
+    </div> -->
+    <div class="field">
+        <label for="status">Status</label>
+        <p-dropdown
+          id="status"
+          [options]="statusOptions"
+          [(ngModel)]="selectedBooking.status"
+          placeholder="Select Status"
+          optionLabel="label"
+          optionValue="value"
+        ></p-dropdown>
+      </div>
+      <div class="field">
+        <label for="date">Date</label>
+        <p-calendar 
+          [(ngModel)]="selectedBooking.selectedDate" 
+          [showIcon]="true"
+          dateFormat="M d, yy"
+          appendTo="body"
+        ></p-calendar>
+      </div>
+      <div class="field">
+        <label for="time">Time</label>
+        <p-calendar 
+          [(ngModel)]="selectedBooking.selectedSlot" 
+          [timeOnly]="true" 
+          [showIcon]="true"
+          hourFormat="12"
+          appendTo="body"
+        ></p-calendar>
+      </div>
+  
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="editBookingDialog = false"></button>
+      <button pButton label="Save" icon="pi pi-check" class="p-button-text" (click)="saveBooking()"></button>
+    </ng-template>
+  </p-dialog>
+
+
+  <p-dialog [(visible)]="deleteBookingDialog" header="Confirm" [modal]="true" [style]="{width: '450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span>Are you sure you want to delete <b>{{selectedBooking?.treatmentDetails?.title}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton label="No" icon="pi pi-times" class="p-button-text" (click)="deleteBookingDialog = false"></button>
+      <button pButton label="Yes" icon="pi pi-check" class="p-button-text" (click)="confirmDeleteBooking()"></button>
+    </ng-template>
+  </p-dialog>

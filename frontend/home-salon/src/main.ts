@@ -4,6 +4,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+// import Aura from '@primeng/themes/aura';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
@@ -14,6 +15,12 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideAnimationsAsync(), // Adds support for Angular animations (PrimeNG needs this)
-    providePrimeNG({ theme: { preset: Aura } }) // Configures PrimeNG theming with Aura preset
-  ],
+    providePrimeNG({
+      theme: {
+          preset: Aura,
+          options: {
+              darkModeSelector: false || 'none'
+          }
+      }
+  })  ],
 });

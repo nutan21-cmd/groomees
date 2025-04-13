@@ -141,9 +141,15 @@ export class RegistrationPage implements OnInit {
   }
 
   navigateToNextPage() {
-    this.router.navigate(['/booking-details'], {
-      queryParams: { id: this.id },
-    });
+    if(this.profile === 'user'){
+      this.router.navigate(['/tabs/setting'])
+    }
+    else{
+      this.router.navigate(['/booking-details'], {
+        queryParams: { id: this.id },
+      });
+    }
+  
   }
 
   submitForm() {

@@ -60,27 +60,30 @@
         <ion-item class="ion-margin-bottom">
           <ion-input 
             formControlName="flat"
+            readonly
             placeholder="Flat/House no./ Building/Company/ Apartment"
           ></ion-input>
         </ion-item>
-        <div class="error-message" *ngIf="bookingForm.get('address.flat')?.invalid && bookingForm.get('address.flat')?.touched">
+        <!-- <div class="error-message" *ngIf="bookingForm.get('address.flat')?.invalid && bookingForm.get('address.flat')?.touched">
           Flat/House number is required.
-        </div>
+        </div> -->
       
         <ion-item class="ion-margin-bottom">
           <ion-input 
             formControlName="area"
             placeholder="Area/Street/Sector/Village"
+            readonly
           ></ion-input>
         </ion-item>
-        <div class="error-message" *ngIf="bookingForm.get('address.area')?.invalid && bookingForm.get('address.area')?.touched">
+        <!-- <div class="error-message" *ngIf="bookingForm.get('address.area')?.invalid && bookingForm.get('address.area')?.touched">
           Area/Street is required.
         </div>
-      
+       -->
         <ion-item class="ion-margin-bottom">
           <ion-input 
             formControlName="landmark"
             placeholder="Landmark"
+            readonly
           ></ion-input>
         </ion-item>
       
@@ -91,6 +94,7 @@
               type="text" 
               maxlength="6"
               placeholder="6-digit Pincode"
+              readonly
             ></ion-input>
           </ion-item>
           <div class="error-message" *ngIf="bookingForm.get('address.pincode')?.invalid && bookingForm.get('address.pincode')?.touched">
@@ -106,6 +110,7 @@
             <ion-input 
               formControlName="city"
               placeholder="Enter city"
+              readonly
             ></ion-input>
           </ion-item>
           <div class="error-message" *ngIf="bookingForm.get('address.city')?.invalid && bookingForm.get('address.city')?.touched">

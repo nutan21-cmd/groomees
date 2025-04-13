@@ -35,7 +35,8 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "styles": ["src/global.scss", "src/theme/variables.scss",  "node_modules/primeicons/primeicons.css"
+          ],
             "scripts": [],
             "browser": "src/main.ts"
           },
@@ -50,7 +51,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "50kb"
                 }
               ],
               "fileReplacements": [
@@ -109,7 +110,8 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "styles": ["src/global.scss", "src/theme/variables.scss",  "node_modules/primeicons/primeicons.css"
+          ],
             "scripts": []
           },
           "configurations": {

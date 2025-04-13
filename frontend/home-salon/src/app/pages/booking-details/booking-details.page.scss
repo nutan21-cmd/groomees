@@ -7,9 +7,6 @@
   --card-background: white;
 }
 
-ion-content {
-  --background: var(--background-color);
-}
 
 /* Service Header */
 .service-header {
@@ -200,7 +197,7 @@ ion-input.has-focus {
   min-width: 150px; /* Minimum width to prevent squishing */
 }
 
-/* Error messages */
+// /* Error messages */
 .error-message {
   color: #ff3b30;
   font-size: 12px;
@@ -299,3 +296,5 @@ ion-content {
     height: 42px;
   }
 }
+
+

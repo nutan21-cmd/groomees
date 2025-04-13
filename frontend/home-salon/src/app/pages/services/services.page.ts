@@ -8,17 +8,20 @@ import { calendarOutline, refreshCircleOutline, closeCircleOutline } from 'ionic
 import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import { ShimmerComponent } from '../../shimmer/shimmer.component';
+
 @Component({
   selector: 'app-services',
   templateUrl: './services.page.html',
   styleUrls: ['./services.page.scss'],
   standalone: true,
   providers: [ApiService],
-  imports: [ IonIcon, HttpClientModule, IonBadge, IonContent, IonHeader, IonContent, IonToolbar, IonGrid, IonRow, IonCol, IonBackButton, IonButtons, IonToolbar, CommonModule, FormsModule],
+  imports: [ IonIcon, HttpClientModule,ShimmerComponent, IonBadge, IonContent, IonHeader, IonContent, IonToolbar, IonGrid, IonRow, IonCol, IonBackButton, IonButtons, IonToolbar, CommonModule, FormsModule],
 })
 export class ServicesPage implements OnInit {
   historys: any[] = [];
   user: any;  
+  loading: boolean = false;
   constructor(
     private http: HttpClient,
     private alertController: AlertController,
@@ -43,12 +46,15 @@ export class ServicesPage implements OnInit {
   }
   
   fetchServicesHistory() {
+    this.loading=true;
     this.apiService.getServicesHistory(this.user._id).subscribe(
       (response: any) => {
         this.historys = response;
         console.log('Services History:', response);
+        this.loading=false
       },
       (error) => {
+        this.loading=false
         console.error('Error fetching services history:', error);
         this.showToast('Could not load booking history. Please try again later.');
       }
@@ -72,7 +78,7 @@ export class ServicesPage implements OnInit {
             this.showToast('Redirecting to reschedule page...');
             this.router.navigate(['/booking-details'], {
               queryParams: {
-                contentType: treatment.contentType,
+                bookingId:bookingId,
                 id: treatment._id,
                 imageUrl: treatment.imageUrl,
                 phone: this.user.phone}});          }
@@ -95,13 +101,16 @@ export class ServicesPage implements OnInit {
         {
           text: 'Yes, Cancel',
           handler: () => {
+            this.loading=true
             this.apiService.cancelBooking(bookingId).subscribe(
               (response: any) => {
                 console.log('Booking cancelled:', response);
+                this.loading=false
                 this.showToast('Your appointment has been cancelled successfully.');
                 this.fetchServicesHistory(); // Refresh the list
               },
               (error) => {
+                this.loading=false
                 console.error('Error cancelling booking:', error);
                 this.showToast('Could not cancel your appointment. Please try again later.');
               }

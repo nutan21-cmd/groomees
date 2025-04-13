@@ -1,0 +1,245 @@
+
+@import '../../../global.scss';
+
+
+  // :host ::ng-deep .p-tablist-tab-list {
+  //   background-color: $white;
+
+  // }
+
+  // :host ::ng-deep .p-tabpanels{
+  //   background-color: $white;
+  // }
+
+
+
+
+.layout-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: $spacing-unit;
+}
+
+// Dialog styles
+.treatment-dialog,
+.category-dialog {
+  @include card-style;
+  padding: 1.25rem;
+  
+  label {
+    display: block;
+    margin: 1rem 0 0.5rem;
+    font-weight: 600;
+    color: $black;
+    font-size: 0.95rem;
+  }
+  
+  .image-ratio {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 250px;
+    border-radius: $border-radius;
+    border: 1px solid $gray-medium;
+  }
+}
+
+// Image container
+.image-container {
+  width: 200px;
+  height: auto;
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: $shadow-light;
+  
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+
+
+// Deep styling for PrimeNG components
+
+
+// Custom layout components
+.card-container {
+  @include card-style;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    .button-group {
+      margin-top: 1rem;
+      width: 100%;
+    }
+  }
+  
+  :host ::ng-deep {
+    .p-datatable-responsive {
+      .p-datatable-tbody > tr > td {
+        padding: 0.75rem 0.5rem;
+        
+        &:before {
+          font-weight: 600;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+.category-actions-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+  
+  .image-container {
+    width: 120px;
+    height: 90px;
+    overflow: hidden;
+    border-radius: 6px;
+    
+    img.image-ratio {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    
+    .action-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(0,0,0,0.05);
+      }
+      
+      &.edit-button:hover {
+        background-color: rgba(33,150,243,0.1);
+      }
+      
+      &.delete-button:hover {
+        background-color: rgba(244,67,54,0.1);
+      }
+      
+      &.add-button:hover {
+        background-color: rgba(76,175,80,0.1);
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .category-actions-container {
+    flex-direction: column;
+    
+    .image-container {
+      margin-bottom: 1rem;
+      width: 100%;
+      height: 140px;
+    }
+    
+    .action-buttons {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+// textarea, input, p-inputnumber {
+//   border: 1px solid #ced4da;
+//   border-radius: 6px;
+//   padding: 0.75rem;
+//   font-size: 1rem;
+//   line-height: 1.5;
+//   transition: border-color 0.2s, box-shadow 0.2s;
+//   resize: vertical;
+//   background-color: #fff;
+//   color: #333;
+  
+//   &:focus {
+//     outline: none;
+//     border-color: #2196F3;
+//     box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.25);
+//   }
+  
+//   &.ng-invalid.ng-touched, 
+//   &.ng-invalid.ng-dirty {
+//     border-color: #f44336;
+    
+//     &:focus {
+//       box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.25);
+//     }
+//   }
+  
+//   &::placeholder {
+//     color: #aab5bd;
+//   }
+  
+//   &:disabled {
+//     background-color: #f8f9fa;
+//     cursor: not-allowed;
+//     opacity: 0.7;
+//   }
+// }
+
+// .p-error {
+//   color: #f44336;
+//   font-size: 0.875rem;
+//   margin-top: 0.25rem;
+//   display: block;
+// }
+
+// .block {
+//   display: block;
+// }
+
+// .font-bold {
+//   font-weight: 600;
+// }
+
+// .mb-3 {
+//   margin-bottom: 0.75rem;
+// }
