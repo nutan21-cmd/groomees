@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonIcon, IonToolbar } from '@ionic/angular/standalone';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, chevronDownOutline, chevronForwardOutline, createOutline, trashOutline } from 'ionicons/icons';
+import { addCircleOutline, createOutline, trashOutline } from 'ionicons/icons';
 import { TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { HttpClientModule } from '@angular/common/http';
@@ -65,7 +65,6 @@ interface Booking {
   imports: [
     IonContent,
     IonHeader,
-    IonTitle,
     IonToolbar,
     CommonModule,
     FormsModule,

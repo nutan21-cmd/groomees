@@ -55,6 +55,18 @@
         </ion-row>
       </ion-grid>
     </div>
+
+        <!-- No Bookings Section -->
+        <div *ngIf="!historys || historys.length === 0" class="no-bookings-container">
+          <div class="no-bookings-content">
+            <ion-icon name="calendar" class="no-bookings-icon"></ion-icon>
+            <h2>No Bookings Found</h2>
+            <p>You haven't made any bookings yet. Book a service to get started.</p>
+            <ion-button expand="block" color="primary" (click)="navigateToServices()">
+              Book a Service
+            </ion-button>
+          </div>
+        </div>
   </ng-container>
  
 </ion-content>

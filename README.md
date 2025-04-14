@@ -9,11 +9,11 @@ To run API server and Mongodb at localhost:3000
 - wait for few minutes for GHA to finish uploading image
 - ssh into google cloud VM:       
 ```gcloud compute ssh --project=groomees-63765 --zone=asia-south2-c instance-20250405-130557```
-- cd ~/groomies
+- cd ~/groomees
 - git fetch --all
 - git reset --hard origin/main
-- docker compose -f docker-compose.yaml pull
-- docker compose -f docker-compose.yaml up -d
+- sudo docker compose -f docker-compose.yaml pull
+- sudo docker compose -f docker-compose.yaml up -d
 
 **How to Build Frontend APK**  
 - rm -rf www

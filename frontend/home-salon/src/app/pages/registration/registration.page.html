@@ -1,4 +1,13 @@
-<ion-content>
+<p-progress-spinner *ngIf="loading" ariaLabel="loading" />
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" color="text-color">
+      <ion-back-button defaultHref="/tabs/setting"></ion-back-button>
+    </ion-buttons>
+    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" *ngIf="!loading">
   <div class="registration-container">
     <h1 class="form-title" *ngIf="profile === 'user'; else registrationTitle">Profile</h1>
     <ng-template #registrationTitle>

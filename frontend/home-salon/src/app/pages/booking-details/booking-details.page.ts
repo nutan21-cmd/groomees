@@ -7,6 +7,7 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { IonButton, IonBackButton, IonHeader, IonToolbar, IonAlert, IonChip, IonInput, IonButtons, IonItem, IonContent } from '@ionic/angular/standalone';
 import { ApiService } from 'src/app/services/api.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-booking-details',
@@ -23,7 +24,8 @@ import { ApiService } from 'src/app/services/api.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ProgressSpinnerModule
   ]
 })
 export class BookingDetailsPage implements OnInit {
@@ -39,6 +41,7 @@ export class BookingDetailsPage implements OnInit {
   user: any;
   bookingId: any;
   historys: any;
+  loading:boolean=false
 
   constructor(
     private route: ActivatedRoute,
@@ -155,9 +158,11 @@ export class BookingDetailsPage implements OnInit {
 
   // Rest of the methods (fetchServicesHistory, getBookingDetails, confirmSchedule, navigateToHome) remain unchanged
   fetchServicesHistory() {
+    this.loading=true
     this.apiService.getServicesHistory(this.user._id).subscribe(
       (response: any) => {
         this.historys = response;
+        this.loading=false
         console.log('Services History:', response);
       },
       (error) => {
@@ -167,6 +172,7 @@ export class BookingDetailsPage implements OnInit {
   }
 
   getBookingDetails() {
+    this.loading=true
     if (this.bookingId) {
       this.apiService.getBookingDetails(this.bookingId).subscribe(
         (response: any) => {
@@ -174,6 +180,7 @@ export class BookingDetailsPage implements OnInit {
             selectedDate: response.selectedDate,
             selectedSlot: response.selectedSlot,
           });
+          this.loading=false
           this.selectedDate = response.selectedDate;
           this.selectedSlot = response.selectedSlot;
           //  Generate available slots for the selected date
@@ -196,10 +203,12 @@ export class BookingDetailsPage implements OnInit {
       };
 
       if (this.bookingId) {
+        this.loading=true
         this.apiService.resheduleBookings(this.bookingId, formData).subscribe(
           (response: any) => {
             console.log(response);
             this.getBookingDetails();
+            this.loading=false
             this.isAlertOpen = true;
           },
           (error: any) => {
@@ -207,10 +216,12 @@ export class BookingDetailsPage implements OnInit {
           }
         );
       } else {
+        this.loading=true;
         this.apiService.createBooking(formData).subscribe(
           (response: any) => {
             console.log('Booking confirmed:', response);
             this.fetchServicesHistory();
+            this.loading=false
             this.isAlertOpen = true;
           },
           (error) => {
@@ -226,6 +237,6 @@ export class BookingDetailsPage implements OnInit {
 
   navigateToHome() {
     this.isAlertOpen = false;
-    this.router.navigate(['/tabs/home']);
+    this.router.navigate(['/tabs/services']);
   }
 }

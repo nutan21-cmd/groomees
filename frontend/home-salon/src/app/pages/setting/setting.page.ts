@@ -1,35 +1,74 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent,IonLabel, IonHeader, IonItem, IonToolbar, IonIcon, IonList, IonBackButton, IonButtons, IonButton } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { IonContent, IonLabel, IonHeader, IonItem, IonToolbar, IonIcon, IonList, IonBackButton, IonButtons, IonButton } from '@ionic/angular/standalone';
+import { Router, NavigationEnd } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { chevronForward, createOutline, helpCircleOutline, informationCircleOutline, logOutOutline, notificationsOutline, personCircleOutline, phoneLandscape } from 'ionicons/icons';
+import { chevronForward, createOutline, helpCircleOutline, informationCircleOutline, logOutOutline, logInOutline, notificationsOutline, personCircleOutline } from 'ionicons/icons';
+import { UserService } from 'src/app/user-services.service';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-setting',
   templateUrl: './setting.page.html',
   styleUrls: ['./setting.page.scss'],
   standalone: true,
-  imports: [IonContent,IonButton,IonBackButton,IonButtons,IonIcon,IonList,IonItem,IonLabel, IonHeader, IonToolbar, CommonModule, FormsModule]
+  providers: [UserService],
+  imports: [IonContent, IonButton, IonBackButton, IonButtons, IonIcon, IonList, IonItem, IonLabel, IonHeader, IonToolbar, CommonModule, FormsModule],
 })
-export class SettingPage implements OnInit {
+export class SettingPage implements OnInit, OnDestroy {
   username: string | null = null;
-  user:any
+  user: any;
+  private userSubscription: Subscription | undefined;
+  private routerSubscription: Subscription | undefined;
 
-  constructor(private router: Router) {
-    addIcons({notificationsOutline,personCircleOutline, createOutline,chevronForward, informationCircleOutline , helpCircleOutline,logOutOutline});
-
+  constructor(private router: Router, private userService: UserService) {
+    addIcons({
+      notificationsOutline,
+      personCircleOutline,
+      logInOutline,
+      createOutline,
+      chevronForward,
+      informationCircleOutline,
+      helpCircleOutline,
+      logOutOutline,
+    });
   }
 
   ngOnInit() {
-    const userData = localStorage.getItem('user');
-    if(userData) {
-      this.user = JSON.parse(userData);
+    // Initialize user subscription
+    this.userSubscription = this.userService.user$.subscribe((user) => {
+      this.user = user;
+      this.updateUsername();
+    });
+
+    // Subscribe to router events to ensure username updates on navigation
+    this.routerSubscription = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.urlAfterRedirects.includes('/tabs/setting')) {
+          this.userService.loadUser(); // Ensure latest user data
+          // this.updateUsername();
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  updateUsername() {
+    if (this.user?._id) {
       this.username = `${this.user.firstName} ${this.user.lastName}`;
-
-    } 
-
+      console.log('Updated username:', this.username);
+    } else {
+      this.username = null;
+    }
   }
 
   onNotificationsClick() {
@@ -38,8 +77,6 @@ export class SettingPage implements OnInit {
 
   onAboutClick() {
     this.router.navigate(['/about-us']);
-
-    // Navigate to about page or show about modal
   }
 
   onHelpClick() {
@@ -47,18 +84,17 @@ export class SettingPage implements OnInit {
   }
 
   onLogout() {
-    if(localStorage.getItem('user')) {
-      
-      localStorage.removeItem('user');
-    }
+    this.userService.clearUser(); // Use UserService to clear user
+    this.router.navigate(['/tabs/home']);
+  }
+
+  onLogIn() {
     this.router.navigate(['/login']);
-
   }
 
-  onEditProfile(){
-    this.router.navigate(['/registration'], {queryParams: {profile: 'user','phone': this.user.phone,imageUrl:this.user.imageUrl}});
-  // Navigate to edit profile page
+  onEditProfile() {
+    this.router.navigate(['/registration'], {
+      queryParams: { profile: 'user', phone: this.user?.phone, imageUrl: this.user?.imageUrl },
+    });
   }
-
-
 }

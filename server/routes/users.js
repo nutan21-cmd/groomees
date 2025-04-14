@@ -119,6 +119,7 @@ router.post("/:id", async (req, res) => {
       lastName: Joi.string().max(40),
       phone: Joi.number(),
       email: Joi.string().email(),
+      TYPE: Joi.string(),
       address: Joi.object({
         flat: Joi.string(),
         area: Joi.string(),
@@ -146,7 +147,7 @@ router.post("/:id", async (req, res) => {
     const updatedPerson = await person.save();
 
     // Send the updated person details in the response
-    res.send(_.pick(updatedPerson, ["_id", "firstName", "lastName", "phone", "email", "address"]));
+    res.send(_.pick(updatedPerson, ["_id", "firstName", "lastName", "phone", "email", "address","TYPE"]));
   } catch (error) {
     res.status(500).send({ error: "An error occurred while updating the person.", details: error.message });
   }

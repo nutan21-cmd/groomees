@@ -1,64 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import { IonicModule } from '@ionic/angular';
-import { IonButton, IonInput, IonLabel,IonItem, IonList, IonContent } from '@ionic/angular/standalone';
+import { IonButton, IonInput, IonLabel, IonItem, IonHeader, IonToolbar, IonButtons, IonBackButton, IonContent } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-import { HttpClient ,HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import { UserService } from 'src/app/user-services.service';
+import { Subscription } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.page.html',
   styleUrls: ['./registration.page.scss'],
   standalone: true,
-providers: [ApiService],
+  providers: [ApiService, UserService],
   imports: [
-    IonContent, IonButton, IonInput,IonLabel, IonItem, 
-    CommonModule, 
+    IonContent,
+    IonButton,
+    IonInput,
+    IonLabel,
+    IonItem,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    ProgressSpinnerModule,
   ],
 })
-
-export class RegistrationPage implements OnInit {
+export class RegistrationPage implements OnInit, OnDestroy {
   registrationForm!: FormGroup;
-  phone!: string; // Default phone number
-  user:any
+  phone!: string;
+  user: any;
   id: string | null = null;
   profile: any;
-  userData:any
-  constructor(private formBuilder: FormBuilder,private router:Router, private apiService:ApiService, private route:ActivatedRoute) {
-    this.createForm()
+  userData: any;
+  imageUrl: any;
+  loading: boolean = false;
+  private userSubscription!: Subscription;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private userService: UserService
+  ) {
+    this.createForm();
   }
+
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      this.id = params['id']; // Retrieve the type parameter
-      this.profile = params['profile']; // Retrieve the type parameter
-      this.phone = params['phone']; // Retrieve the type parameter
+      this.id = params['id'];
+      this.profile = params['profile'];
+      this.phone = params['phone'];
+      this.imageUrl = params['imageUrl'];
 
-      this.editUserProfile()
+      if (this.profile === 'user') {
+        this.editUserProfile();
+      }
     });
   }
 
-  editUserProfile(){
-    if(this.profile === 'user') {
-      const user = localStorage.getItem('user');
-      if(user) {
-        this.userData = JSON.parse(user);
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  editUserProfile() {
+    this.loading = true;
+    this.userSubscription = this.userService.user$.subscribe((user) => {
+      this.userData = user;
+      console.log(this.userData, 'from userservice');
+      if (this.userData) {
         this.registrationForm.patchValue({
-          firstName: this.userData.firstName,
-          lastName: this.userData.lastName,
-          email: this.userData.email,
-          flat: this.userData.address.flat,
-          area: this.userData.address.area,
-          landmark: this.userData.address.landmark,
-          pincode: this.userData.address.pincode,
-          city: this.userData.address.city
+          firstName: this.userData.firstName || '',
+          lastName: this.userData.lastName || '',
+          email: this.userData.email || '',
+          flat: this.userData.address?.flat || '',
+          area: this.userData.address?.area || '',
+          landmark: this.userData.address?.landmark || '',
+          pincode: this.userData.address?.pincode || '',
+          city: this.userData.address?.city || '',
         });
       }
-    }
+      this.loading = false;
+    });
   }
 
   createForm() {
@@ -70,12 +103,13 @@ export class RegistrationPage implements OnInit {
       area: ['', [Validators.required]],
       landmark: [''],
       pincode: ['', [Validators.required, Validators.pattern('[0-9]{6}')]],
-      city: ['', [Validators.required]]
+      city: ['', [Validators.required]],
     });
   }
 
-  // Convenience getter for easy access to form fields
-  get f() { return this.registrationForm.controls; }
+  get f() {
+    return this.registrationForm.controls;
+  }
 
   validateForm() {
     if (this.registrationForm.invalid) {
@@ -113,43 +147,55 @@ export class RegistrationPage implements OnInit {
   }
 
   registerUser(payload: any) {
+    this.loading = true;
     this.apiService.registerUser(payload).subscribe(
       (response: any) => {
         console.log('Registration successful:', response);
-        localStorage.setItem('user', JSON.stringify(response));
+        this.userService.updateUser(response); // Update UserService
+        this.loading = false;
         this.navigateToNextPage();
       },
       (error) => {
         console.error('Error registering user:', error);
+        this.loading = false;
       }
     );
   }
- 
-  
 
   updateUserProfile(payload: any) {
-    this.apiService.updateUserProfile(payload, this.userData._id).subscribe(
+    console.log(payload)
+    // payload.TYPE='Admin'
+    this.loading = true;
+    this.apiService.updateUserProfile(payload, this.userData?._id).subscribe(
       (response: any) => {
         console.log('Profile updated successfully:', response);
-        localStorage.setItem('user', JSON.stringify(response));
+        this.userService.updateUser(response); // Update UserService
+        this.loading = false;
         this.navigateToNextPage();
       },
-      (error) => {                
+      (error) => {
         console.error('Error updating profile:', error);
+        this.loading = false;
       }
     );
   }
 
   navigateToNextPage() {
-    if(this.profile === 'user'){
-      this.router.navigate(['/tabs/setting'])
+    if (this.profile === 'user') {
+      this.router.navigate(['/tabs/setting']);
+    } else {
+      if (this.id && this.imageUrl) {
+        this.router.navigate(['/booking-details'], {
+          queryParams: {
+            id: this.id,
+            phone: this.phone,
+            imageUrl: this.imageUrl,
+          },
+        });
+      } else {
+        this.router.navigate(['/tabs/home']);
+      }
     }
-    else{
-      this.router.navigate(['/booking-details'], {
-        queryParams: { id: this.id },
-      });
-    }
-  
   }
 
   submitForm() {
