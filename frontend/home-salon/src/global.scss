@@ -86,19 +86,9 @@ html {
 }
 
 
-// ion-content {
-//   margin-top: 60px !important; /* Add margin equal to the header height */
-//   --background: var(--background-color);
-
-// }
-
-ion-header ion-toolbar {
-  --background: var(--background-color) !important; /* Force the background color */
-}
-
 ion-header img.header-logo {
   width: 100%; /* Full width */
-  height: 60px; /* Maintain aspect ratio */
+  height: auto; /* Maintain aspect ratio */
 }
 
 .card-section {
@@ -564,6 +554,27 @@ textarea, input, p-inputnumber {
 .mb-3 {
   margin-bottom: 0.75rem;
 }
+.header{
+  ion-toolbar {
+    position: relative;
+    --background: transparent;
+  }
+  
+  .header-logo {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  ion-buttons {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+}
+
 
 
 

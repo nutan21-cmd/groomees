@@ -162,18 +162,19 @@ export class BookingDetailsPage implements OnInit {
     this.apiService.getServicesHistory(this.user._id).subscribe(
       (response: any) => {
         this.historys = response;
-        this.loading=false
+        this.loading=false;
         console.log('Services History:', response);
       },
       (error) => {
+        this.loading=false;
         console.error('Error fetching services history:', error);
       }
     );
   }
 
   getBookingDetails() {
-    this.loading=true
     if (this.bookingId) {
+      this.loading=true
       this.apiService.getBookingDetails(this.bookingId).subscribe(
         (response: any) => {
           this.bookingForm.patchValue({
@@ -187,6 +188,7 @@ export class BookingDetailsPage implements OnInit {
         this.generateAvailableSlots(response.selectedDate);
         },
         (error) => {
+          this.loading=false
           console.error('Error fetching booking details:', error);
         }
       );
@@ -200,11 +202,12 @@ export class BookingDetailsPage implements OnInit {
         status: 'confirmed',
         treatmentId: this.id,
         userId: this.user ? this.user._id : null,
+        bookingId: this.bookingId,
       };
 
       if (this.bookingId) {
         this.loading=true
-        this.apiService.resheduleBookings(this.bookingId, formData).subscribe(
+        this.apiService.resheduleBookings(formData).subscribe(
           (response: any) => {
             console.log(response);
             this.getBookingDetails();
@@ -216,22 +219,24 @@ export class BookingDetailsPage implements OnInit {
           }
         );
       } else {
-        this.loading=true;
         this.apiService.createBooking(formData).subscribe(
           (response: any) => {
             console.log('Booking confirmed:', response);
             this.fetchServicesHistory();
-            this.loading=false
+            this.loading=false;
             this.isAlertOpen = true;
           },
           (error) => {
+            this.loading=false
             console.error('Error confirming booking:', error);
           }
         );
       }
     } else {
+      this.loading=false
       this.bookingForm.markAllAsTouched();
     }
+    this.loading=false
     console.log('Booking form data:', this.bookingForm.value);
   }
 

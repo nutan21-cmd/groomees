@@ -1,9 +1,4 @@
-/* Main container styling */
-.ion-padding {
-  --padding-top: 16px;
-  --padding-bottom: 16px;
-  background-color: #f8f9fa;
-}
+
 
 /* Card section styling */
 .card-section {
@@ -172,25 +167,16 @@ ion-badge[color="danger"] {
   font-size: 18px;
 }
 
-/* Header styling */
-ion-header {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
 
-ion-toolbar {
-  --background: white;
-  --color: #333;
-}
 
-.header-logo {
-  height: 36px;
-  display: block;
-  margin: 0 auto;
-}
 
-ion-back-button {
-  --color: #666;
-}
+
+// .header-logo {
+//   height: auto;
+//   width: 100%;
+// }
+
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -297,3 +283,24 @@ ion-row {
   --border-radius: 8px;
   font-weight: 500;
 }
+
+
+
+// ion-toolbar {
+//   position: relative;
+//   --background: transparent;
+// }
+
+// .header-logo {
+//   width: 100%;
+//   height: auto;
+//   display: block;
+// }
+
+// ion-buttons {
+//   position: absolute;
+//   top: 50%;
+//   left: 10px;
+//   transform: translateY(-50%);
+//   z-index: 10;
+// }

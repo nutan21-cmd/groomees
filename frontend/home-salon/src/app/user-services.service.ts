@@ -1,4 +1,3 @@
-// src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, Observable } from 'rxjs';
 
@@ -10,6 +9,7 @@ export class UserService {
   user$: Observable<any> = this.userSubject.asObservable().pipe(
     distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
   );
+
   constructor() {
     this.loadUser();
   }
@@ -20,8 +20,10 @@ export class UserService {
   }
 
   updateUser(user: any) {
-    localStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(user);
+    const userCopy = user ? { ...user } : null; // Create a new object to ensure change detection
+    console.log('Updating user:', userCopy); // Debug
+    localStorage.setItem('user', JSON.stringify(userCopy));
+    this.userSubject.next(userCopy);
   }
 
   clearUser() {

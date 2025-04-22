@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="light">
-    <img src="assets/images/GM2.png" alt="Logo" class="header-logo">
+    <img src="assets/images/GM2.jpeg" alt="Logo" class="header-logo">
   </ion-toolbar>
 </ion-header> 
   <p-toast></p-toast>
@@ -29,19 +29,7 @@
               </span>
             </div>
           </ng-template>
-          <!-- <ng-template pTemplate="header">
-
-            <tr>
-              <th style="width: 5%">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-              <th pSortableColumn="title" style="width: 20% !important;">Title <p-sortIcon field="title"></p-sortIcon></th>
-              <th pSortableColumn="price" style="width: 15% !important;">Price <p-sortIcon field="price"></p-sortIcon></th>
-              <th style="width:40% !important">Description</th>
-              <th style="width: 15% !important;">Image</th>
-              <th style="width: 7% !important;">Actions</th>
-            </tr>
-          </ng-template> -->
+          
           <ng-template pTemplate="header">
             <tr>
              
@@ -66,7 +54,7 @@
             <tr>
              
               <td>{{treatments.title}}</td>
-              <td>{{treatments.price | currency:'USD'}}</td>
+              <td>{{treatments.price | currency:'INR'}}</td>
               <td >
                 {{treatments.contentDescription}}
               </td>
@@ -138,7 +126,7 @@
           <ng-template pTemplate="body" let-item>
             <tr>
               <td>{{item.title}}</td>
-              <td>{{item.price | currency:'USD'}}</td>
+              <td>{{item.price | currency:'INR'}}</td>
               <td>
                 {{item.contentDescription}}
               </td>
@@ -221,7 +209,7 @@
                   <ng-template pTemplate="body" let-item>
                     <tr>
                       <td>{{ item.title }}</td>
-                      <td>{{ item.price | currency:'USD' }}</td>
+                      <td>{{ item.price | currency:'INR' }}</td>
                       <td style="max-width: 15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         {{ item.contentDescription }}
                       </td>
@@ -254,51 +242,6 @@
       </p-tabPanel>
     </p-tabView>
   </ion-content>
-
-
-  
-
-  <!-- <p-dialog [(visible)]="itemDialog" [style]="{width: '650px'}" header="Treatment Details" [modal]="true">
-    <form [formGroup]="treatmentForm" (ngSubmit)="saveTreatment()">
-      <div class="p-fluid">
-        <div class="p-field">
-          <label for="title">Title</label>
-          <input id="title" pInputText formControlName="title" />
-          <small *ngIf="submitted && treatmentForm.controls['title'].invalid" class="p-error">Title is required.</small>
-        </div>
-  
-        <div class="p-field">
-          <label for="price">Price</label>
-          <input id="price" type="number" pInputText formControlName="price" />
-          <small *ngIf="submitted && treatmentForm.controls['price'].invalid" class="p-error">Price must be greater than 0.</small>
-        </div>
-  
-        <div class="p-field">
-          <label for="contentDescription">Description</label>
-          <textarea id="contentDescription" pInputTextarea formControlName="contentDescription"></textarea>
-          <small *ngIf="submitted && treatmentForm.controls['contentDescription'].invalid" class="p-error">Description is required.</small>
-        </div>
-  
-        <div class="p-field">
-          <label for="contentHighlights">Highlights</label>
-          <textarea id="contentHighlights" pInputTextarea formControlName="contentHighlights"></textarea>
-          <small *ngIf="submitted && treatmentForm.controls['contentHighlights'].invalid" class="p-error">Highlights are required.</small>
-        </div>
-  
-        <div class="p-field">
-          <label for="imageUrl">Image URL</label>
-          <input id="imageUrl" pInputText formControlName="imageUrl" />
-          <small *ngIf="submitted && treatmentForm.controls['imageUrl'].invalid" class="p-error">Image URL is required.</small>
-        </div>
-      </div>
-  
-      <div class="p-dialog-footer">
-        <button pButton type="button" label="Cancel" icon="pi pi-times" (click)="hideDialog()"></button>
-        <button pButton type="submit" label="Save" icon="pi pi-check"></button>
-      </div>
-    </form>
-  </p-dialog> -->
-  
   
   <p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}" header="Category Details" [modal]="true" 
             styleClass="p-fluid">
@@ -367,29 +310,7 @@
             [alt]=" treatmentForm.get('imageUrl')?.value"
             class="block m-auto pb-4 image-ratio"
             /> 
-            <!-- <div>
-              <label for="imageUpload" class="block font-bold mb-3">Upload Image</label>
-              <p-fileUpload
-                name="image"
-                mode="advanced"
-                accept="image/*"
-                maxFileSize="1000000"
-                customUpload="true"
-                [auto]="true"
-                [showUploadButton]="false"
-                [showCancelButton]="false"
-                dragDrop="true"
-                chooseLabel="Drag and drop or click to upload"
-              ></p-fileUpload>
-              <div *ngIf="treatmentForm.get('imageUrl')?.value" class="mt-3">
-                <label>Image Preview</label>
-                <img
-                  [src]="treatmentForm.get('imageUrl')?.value"
-                  [alt]="treatmentForm.get('title')?.value"
-                  class="block m-auto pb-4 image-ratio"
-                />
-              </div>
-            </div> -->
+        
           </div>
          
           <div>
@@ -469,7 +390,7 @@
                 id="price"
                 formControlName="price"
                 mode="currency"
-                currency="USD"
+                currency="INR"
                 locale="en-US"
                 fluid
               ></p-inputnumber>

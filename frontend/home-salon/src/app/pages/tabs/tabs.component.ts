@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component ,OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-// import { IonicModule } from '@ionic/angular';
 import { IonTabs,IonTabButton,IonLabel,IonTabBar ,IonIcon} from '@ionic/angular/standalone';
 import { UserService } from 'src/app/user-services.service';
 import { addIcons } from 'ionicons';
@@ -40,8 +39,13 @@ export class TabsComponent implements OnDestroy {
     this.userSubscription = this.userService.user$.subscribe((user) => {
       this.userData = user || {};
       console.log('User data in tabs:', this.userData);
+      console.log('Tabs user data:', this.userData, 'TYPE:', this.userData.TYPE); // Debug
       this.cdr.detectChanges(); // Trigger change detection
     });
+  }
+
+  ionViewWillEnter() {
+    this.userService.loadUser(); // Reload user from localStorage
   }
 
   ngOnDestroy() {

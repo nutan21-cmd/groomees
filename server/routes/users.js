@@ -155,48 +155,6 @@ router.post("/:id", async (req, res) => {
 
 
 
-//new user
-// router.post("/", async (req, res) => {
-//   let person = new Person({
-//     TYPE: req.body.type,
-//     firstName: req.body.firstName,
-//     lastName: req.body.lastName,
-//     gender: req.body.gender,
-//     email: req.body.email,
-//     password: req.body.password,
-//     dateOfBirth: new Date(req.body.dob),
-
-//     addresses: [
-//       {
-//         street: req.body.street1,
-//         city: req.body.city1,
-//         state: req.body.state1,
-//         zip: req.body.zip1,
-//         isPrimary: true
-//       },
-//       {
-//         street: req.body.street2,
-//         city: req.body.city2,
-//         state: req.body.state2,
-//         zip: req.body.zip2
-//       }
-//     ],
-//     phones: [
-//       {
-//         phone: req.body.phone1,
-//         isPrimary: true
-//       },
-//       {
-//         phone: req.body.phone2
-//       }
-//     ]
-//   });
-
-//   person.followers.push(req.params.id);
-//   const saved = await person.save();
-//   res.send({ _id: saved._id });
-// });
-
 //remove(unfollow) the current user as a follwer of someone else
 router.delete("/:id/unfollow/:personId", validateObject, async (req, res) => {
   const person = await Person.findById(req.params.personId);

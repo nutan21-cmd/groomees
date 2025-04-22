@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl: string = 'http://34.131.137.64/api';
+  private apiUrl: string = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
@@ -106,8 +106,8 @@ export class ApiService {
     return this.http.delete(`${this.apiUrl}/bookings/${bookingId}`);
   }
 
-  resheduleBookings(bookingId: string, updatedData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/bookings/reshedule/${bookingId}`, updatedData);
+  resheduleBookings(updatedData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/bookings/reshedule`, updatedData);
   }
 
   getBookingDetails(bookingId: string): Observable<any> {

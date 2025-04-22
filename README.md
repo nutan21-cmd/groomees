@@ -18,6 +18,6 @@ To run API server and Mongodb at localhost:3000
 **How to Build Frontend APK**  
 - rm -rf www
 - ionic build
-- ionic capacitor add android
+- ionic capacitor sync android
 - ionic capacitor open android
 - android:usesCleartextTraffic="true

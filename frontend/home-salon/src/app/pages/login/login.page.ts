@@ -115,9 +115,10 @@ export class LoginPage implements OnInit, OnDestroy {
                   id: this.id,
                   phone: this.loginForm.get('phone')?.value,
                 },
+                replaceUrl:true
               });
             } else {
-              this.router.navigate(['/tabs/home']);
+              this.router.navigate(['/tabs/home'],{replaceUrl:true});
             }
           } else {
             this.router.navigate(['/registration'], {
@@ -126,6 +127,7 @@ export class LoginPage implements OnInit, OnDestroy {
                 phone: this.loginForm.get('phone')?.value,
                 imageUrl: this.imageUrl,
               },
+              replaceUrl: true,
             });
           }
         },
